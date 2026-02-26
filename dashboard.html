@@ -6,6 +6,7 @@
   <title>BRAIN — Jacob Cassar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -68,10 +69,7 @@
 
     .brand span { color: var(--muted); font-size: 11px; letter-spacing: 0.05em; margin-left: 10px; }
 
-    .header-center {
-      display: flex;
-      gap: 6px;
-    }
+    .header-center { display: flex; gap: 6px; }
 
     .pill {
       font-size: 11px;
@@ -126,17 +124,8 @@
       margin-bottom: 20px;
     }
 
-    .identity-name {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .identity-role {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    .identity-name  { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .identity-role  { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
 
     .identity-stats {
       display: grid;
@@ -207,17 +196,8 @@
     .venture-card:hover { border-color: var(--border-hi); }
     .venture-card.primary { border-color: var(--orange-dim); }
 
-    .vc-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .vc-name {
-      font-size: 13px;
-      font-weight: 600;
-    }
+    .vc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .vc-name { font-size: 13px; font-weight: 600; }
 
     .vc-score {
       font-family: var(--mono);
@@ -228,11 +208,7 @@
       border-radius: 4px;
     }
 
-    .vc-status {
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
+    .vc-status { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
 
     .progress-bar {
       height: 3px;
@@ -249,20 +225,9 @@
       transition: width 0.4s ease;
     }
 
-    .vc-metrics {
-      display: flex;
-      gap: 12px;
-    }
-
-    .vc-metric {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .vc-metric span {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .vc-metrics { display: flex; gap: 12px; }
+    .vc-metric { font-size: 10px; color: var(--muted); }
+    .vc-metric span { color: var(--text); font-weight: 500; }
 
     /* ── TASK COLUMNS ── */
     .task-grid {
@@ -280,6 +245,12 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .task-col.drop-over {
+      border-color: rgba(0,201,167,0.4);
+      background: rgba(0,201,167,0.03);
     }
 
     .col-header {
@@ -306,29 +277,48 @@
       border-radius: 10px;
     }
 
-    .col-active .col-title { color: var(--orange); }
+    .col-active  .col-title { color: var(--orange); }
     .col-waiting .col-title { color: var(--blue); }
     .col-someday .col-title { color: var(--teal); }
 
     /* ── TASK ITEMS ── */
     .task-item {
+      position: relative;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 10px 12px;
       margin-bottom: 8px;
-      cursor: pointer;
+      cursor: grab;
+      user-select: none;
       transition: border-color 0.15s, background 0.15s;
       flex-shrink: 0;
     }
 
-    .task-item:hover { border-color: var(--border-hi); background: var(--bg-hover); }
+    .task-item:active { cursor: grabbing; }
+    .task-item:hover  { border-color: var(--border-hi); background: var(--bg-hover); }
+
+    /* Drag visual states */
+    .task-ghost {
+      opacity: 0.3;
+      background: rgba(0,201,167,0.04) !important;
+      border: 1px dashed rgba(0,201,167,0.35) !important;
+      border-radius: 8px;
+    }
+    .task-chosen { border-color: var(--teal) !important; }
+    .task-drag {
+      opacity: 0.97;
+      transform: rotate(1.2deg);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.55);
+      cursor: grabbing !important;
+    }
 
     .task-title {
       font-size: 12px;
       font-weight: 500;
       line-height: 1.4;
       margin-bottom: 4px;
+      padding-right: 24px; /* room for archive btn */
     }
 
     .task-meta {
@@ -337,9 +327,42 @@
       font-family: var(--mono);
     }
 
+    .task-item.done { opacity: 0.45; }
     .task-item.done .task-title { text-decoration: line-through; color: var(--muted); }
+    .task-item.completing { animation: flash 0.25s ease; }
+    @keyframes flash { 0%,100%{background:var(--bg)} 50%{background:rgba(0,201,167,0.1)} }
 
-    /* ── RIGHT PANEL — FRAMEWORKS ── */
+    /* ── TASK ACTION BUTTONS (archive icon on hover) ── */
+    .task-actions {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      display: none;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .task-item:hover .task-actions { display: flex; }
+
+    .task-action-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hi);
+      color: var(--muted);
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.12s;
+      line-height: 1;
+    }
+
+    .task-action-btn:hover { color: var(--orange); border-color: var(--orange-dim); background: rgba(242,100,25,0.08); }
+
+    /* ── RIGHT PANEL ── */
     .fw-item {
       padding: 9px 10px;
       border-radius: 7px;
@@ -350,18 +373,8 @@
     }
 
     .fw-item:hover { background: var(--bg-hover); border-color: var(--border-hi); }
-
-    .fw-name {
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 2px;
-    }
-
-    .fw-desc {
-      font-size: 10px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .fw-name { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
+    .fw-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
 
     /* ── RISK METER ── */
     .risk-row {
@@ -374,18 +387,10 @@
     }
 
     .risk-row:last-child { border-bottom: none; }
-
-    .risk-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .risk-dot.high     { background: var(--orange); }
-    .risk-dot.medium   { background: #f0b429; }
-    .risk-dot.low      { background: var(--teal); }
-
+    .risk-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .risk-dot.high   { background: var(--orange); }
+    .risk-dot.medium { background: #f0b429; }
+    .risk-dot.low    { background: var(--teal); }
     .risk-label { flex: 1; color: var(--text); }
     .risk-level { font-family: var(--mono); font-size: 9px; color: var(--muted); }
 
@@ -398,45 +403,19 @@
       margin-bottom: 6px;
     }
 
-    .goal-label {
-      font-size: 10px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 6px;
-    }
-
-    .goal-value {
-      font-family: var(--mono);
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--teal);
-      margin-bottom: 4px;
-    }
-
-    .goal-sub {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    /* ── DONE BADGE ── */
-    .done-badge {
-      font-size: 9px;
-      font-family: var(--mono);
-      color: var(--teal);
-      background: rgba(0, 201, 167, 0.1);
-      border: 1px solid rgba(0, 201, 167, 0.2);
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-    }
+    .goal-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+    .goal-value { font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--teal); margin-bottom: 4px; }
+    .goal-sub   { font-size: 10px; color: var(--muted); }
 
     /* ── EMPTY STATE ── */
     .empty {
       text-align: center;
-      padding: 20px;
-      color: var(--muted);
+      padding: 20px 10px;
+      color: var(--subtle);
       font-size: 11px;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      margin-top: 4px;
     }
 
     /* ── SYNC STATUS ── */
@@ -449,24 +428,207 @@
       gap: 5px;
     }
 
-    /* ── INTERACTIVE TASKS ── */
-    .task-item { user-select: none; }
-    .task-item:not(.done):hover::before {
-      content: '✓';
-      position: absolute;
-      left: -18px;
-      color: var(--teal);
-      opacity: 0.5;
+    /* ── ARCHIVE BUTTON (header) ── */
+    .archive-header-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
+      font-family: var(--mono);
+      padding: 4px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border-hi);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .task-item { position: relative; }
-    .task-item.done { opacity: 0.45; }
-    .task-item.done .task-title { text-decoration: line-through; color: var(--muted); }
-    .task-item.completing { animation: flash 0.2s ease; }
-    @keyframes flash { 0%,100%{background:var(--bg)} 50%{background:rgba(0,201,167,0.1)} }
+
+    .archive-header-btn:hover { color: var(--text); background: var(--bg-hover); }
+
+    .archive-badge {
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--border-hi);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .archive-badge.has-items { background: rgba(242,100,25,0.2); color: var(--orange); }
+
+    /* ── ARCHIVE OVERLAY + PANEL ── */
+    .archive-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 300;
+      display: none;
+    }
+
+    .archive-overlay.open { display: block; }
+
+    .archive-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 390px;
+      height: 100vh;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-hi);
+      display: flex;
+      flex-direction: column;
+      animation: slideInRight 0.2s ease;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(0); }
+    }
+
+    .archive-panel-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .archive-panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .archive-panel-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--border-hi);
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .archive-panel-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.12s;
+    }
+
+    .archive-panel-close:hover { background: var(--bg-hover); color: var(--text); border-color: var(--border-hi); }
+
+    .archive-panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .archive-empty {
+      text-align: center;
+      padding: 56px 24px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .archive-empty .hint {
+      font-size: 10px;
+      color: var(--subtle);
+      margin-top: 10px;
+      font-family: var(--mono);
+    }
+
+    .archive-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 8px;
+      transition: border-color 0.15s;
+    }
+
+    .archive-item:hover { border-color: var(--border-hi); }
+
+    .archive-item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .archive-item-info { flex: 1; min-width: 0; }
+
+    .archive-item-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: line-through;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .archive-item-date {
+      font-size: 9px;
+      font-family: var(--mono);
+      color: var(--subtle);
+    }
+
+    .archive-item-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .arc-btn {
+      font-size: 9px;
+      font-family: var(--mono);
+      padding: 3px 9px;
+      border-radius: 4px;
+      border: 1px solid var(--border-hi);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.12s;
+      text-align: center;
+    }
+
+    .arc-btn.restore:hover { color: var(--teal); border-color: var(--teal); background: rgba(0,201,167,0.08); }
+    .arc-btn.erase:hover   { color: var(--red);  border-color: var(--red);  background: rgba(224,82,82,0.08); }
   </style>
 </head>
 <body>
+
+<!-- ══════════ ARCHIVE OVERLAY ══════════ -->
+<div class="archive-overlay" id="archiveOverlay" onclick="handleArchiveOverlayClick(event)">
+  <div class="archive-panel">
+    <div class="archive-panel-header">
+      <div class="archive-panel-title">
+        📦 Archived Tasks
+        <span class="archive-panel-count" id="archivePanelCount">0</span>
+      </div>
+      <button class="archive-panel-close" onclick="closeArchive()">✕</button>
+    </div>
+    <div class="archive-panel-body" id="archiveBody">
+      <div class="archive-empty">
+        No archived tasks yet.
+        <div class="hint">Hover any task → click 📦 to archive it</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════ HEADER ══════════════════════════════════════ -->
 <header>
@@ -478,7 +640,10 @@
     <div class="pill">📍 Los Angeles, PST</div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="archive-header-btn" onclick="openArchive()">
+      📦 Archive <span class="archive-badge" id="archiveBadge">0</span>
+    </button>
     <span id="sync-status" title="Task data source"></span>
     <div id="clock">––</div>
   </div>
@@ -487,7 +652,6 @@
 <!-- ══════════════════════════════════════ LEFT PANEL ══════════════════════════════════════ -->
 <div class="panel left">
 
-  <!-- Identity -->
   <div class="identity">
     <div class="identity-name">Jacob Cassar</div>
     <div class="identity-role">Apple Specialist · CSUN SCM · Entrepreneur</div>
@@ -511,7 +675,6 @@
     </div>
   </div>
 
-  <!-- Files -->
   <div class="section">
     <div class="section-label">Core Files</div>
     <a class="nav-link" href="brain.md"><span class="icon">🧠</span> brain.md <span class="badge">hot cache</span></a>
@@ -526,12 +689,11 @@
 <!-- ══════════════════════════════════════ MAIN PANEL ══════════════════════════════════════ -->
 <div class="panel main">
 
-  <div class="section-label" style="margin-bottom:16px;">Task Board</div>
+  <div class="section-label" style="margin-bottom:16px;">Task Board — drag between columns · hover to archive</div>
 
   <div class="task-grid">
 
-    <!-- ACTIVE -->
-    <div class="task-col col-active">
+    <div class="task-col col-active" id="taskcol-active">
       <div class="col-header">
         <span class="col-title">Active</span>
         <span class="col-count" id="count-active">0</span>
@@ -539,8 +701,7 @@
       <div id="col-active-tasks"></div>
     </div>
 
-    <!-- WAITING ON -->
-    <div class="task-col col-waiting">
+    <div class="task-col col-waiting" id="taskcol-waiting">
       <div class="col-header">
         <span class="col-title">Waiting On</span>
         <span class="col-count" id="count-waiting">0</span>
@@ -548,8 +709,7 @@
       <div id="col-waiting-tasks"></div>
     </div>
 
-    <!-- SOMEDAY -->
-    <div class="task-col col-someday">
+    <div class="task-col col-someday" id="taskcol-someday">
       <div class="col-header">
         <span class="col-title">Someday</span>
         <span class="col-count" id="count-someday">0</span>
@@ -563,7 +723,6 @@
 <!-- ══════════════════════════════════════ RIGHT PANEL ══════════════════════════════════════ -->
 <div class="panel right">
 
-  <!-- Income Goal -->
   <div class="section">
     <div class="section-label">Income Goal</div>
     <div class="goal-block">
@@ -573,10 +732,8 @@
     </div>
   </div>
 
-  <!-- Ventures -->
   <div class="section">
     <div class="section-label">Ventures</div>
-
     <div class="venture-card primary">
       <div class="vc-top">
         <div class="vc-name">🎨 Sticker Shop</div>
@@ -591,7 +748,6 @@
     </div>
   </div>
 
-  <!-- Risk Radar -->
   <div class="section">
     <div class="section-label">Risk Radar</div>
     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:10px 12px;">
@@ -622,30 +778,24 @@
 
 <script>
   // ── CONFIG ──
-  // After GitHub Pages is live, set this to your raw tasks URL:
-  // https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/tasks.md
-  const TASKS_URL = 'https://raw.githubusercontent.com/apljacob/brain/main/tasks.md';
+  const TASKS_URL    = 'https://raw.githubusercontent.com/apljacob/brain/main/tasks.md';
+  const STORAGE_KEY  = 'brain-completed-tasks';
+  const OVERRIDE_KEY = 'brain-task-overrides';
+  const ARCHIVE_KEY  = 'brain-archived-tasks';
 
   // ── CLOCK ──
   function updateClock() {
-    const now = new Date();
-    const pst = now.toLocaleString('en-US', {
+    const pst = new Date().toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles',
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true
     });
     document.getElementById('clock').textContent = pst + ' PST';
   }
   updateClock();
   setInterval(updateClock, 10000);
 
-  // ── COMPLETION STATE (persists in browser) ──
-  const STORAGE_KEY = 'brain-completed-tasks';
-
+  // ── COMPLETION STATE ──
   function getCompleted() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
     catch { return {}; }
@@ -659,17 +809,317 @@
 
   function toggleTask(title) {
     const c = getCompleted();
-    const nowDone = !c[title];
-    setCompleted(title, nowDone);
-    // Flash animation then re-render
-    const el = [...document.querySelectorAll('.task-item')].find(
-      el => el.dataset.title === title
-    );
+    setCompleted(title, !c[title]);
+    const el = [...document.querySelectorAll('.task-item')].find(e => e.dataset.title === title);
     if (el) { el.classList.add('completing'); setTimeout(() => renderAll(_lastSections), 250); }
     else renderAll(_lastSections);
   }
 
-  // ── EMBEDDED TASK DATA (fallback when offline or pre-GitHub setup) ──
+  // ── COLUMN OVERRIDES (drag-to-move, persisted) ──
+  function getOverrides() {
+    try { return JSON.parse(localStorage.getItem(OVERRIDE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function setOverride(title, col) {
+    const o = getOverrides();
+    if (col === null) delete o[title]; else o[title] = col;
+    localStorage.setItem(OVERRIDE_KEY, JSON.stringify(o));
+  }
+
+  // ── ARCHIVE STATE ──
+  function getArchived() {
+    try { return JSON.parse(localStorage.getItem(ARCHIVE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function archiveTask(encodedTitle, encodedMeta, evt) {
+    if (evt) { evt.stopPropagation(); evt.preventDefault(); }
+    const title = dec(encodedTitle);
+    const meta  = dec(encodedMeta);
+    const a = getArchived();
+    a[title] = {
+      title, meta,
+      archivedAt: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+    };
+    localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
+    renderAll(_lastSections);
+  }
+
+  function restoreTask(encodedTitle) {
+    const title = dec(encodedTitle);
+    const a = getArchived();
+    delete a[title];
+    localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
+    renderAll(_lastSections);
+    renderArchivePanel();
+  }
+
+  function deleteArchived(encodedTitle) {
+    const title = dec(encodedTitle);
+    const a = getArchived();
+    delete a[title];
+    localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
+    renderArchivePanel();
+    updateArchiveBadge();
+  }
+
+  // ── ARCHIVE PANEL UI ──
+  function openArchive() {
+    document.getElementById('archiveOverlay').classList.add('open');
+    renderArchivePanel();
+  }
+
+  function closeArchive() {
+    document.getElementById('archiveOverlay').classList.remove('open');
+  }
+
+  function handleArchiveOverlayClick(evt) {
+    if (evt.target === document.getElementById('archiveOverlay')) closeArchive();
+  }
+
+  function updateArchiveBadge() {
+    const count = Object.keys(getArchived()).length;
+    const badge = document.getElementById('archiveBadge');
+    const panelCount = document.getElementById('archivePanelCount');
+    if (badge) {
+      badge.textContent = count;
+      badge.className = 'archive-badge' + (count > 0 ? ' has-items' : '');
+    }
+    if (panelCount) panelCount.textContent = count;
+  }
+
+  function renderArchivePanel() {
+    const archived = getArchived();
+    const body = document.getElementById('archiveBody');
+    const items = Object.values(archived);
+    updateArchiveBadge();
+
+    if (!items.length) {
+      body.innerHTML = `
+        <div class="archive-empty">
+          No archived tasks yet.
+          <div class="hint">Hover any task → click 📦 to archive it</div>
+        </div>`;
+      return;
+    }
+
+    // Sort by archivedAt desc (most recent first)
+    items.sort((a, b) => (b.archivedAt || '').localeCompare(a.archivedAt || ''));
+
+    body.innerHTML = items.map(item => {
+      const enc = encodeURIComponent(item.title);
+      return `
+        <div class="archive-item">
+          <div class="archive-item-row">
+            <div class="archive-item-info">
+              <div class="archive-item-title">${escHtml(item.title)}</div>
+              <div class="archive-item-date">Archived ${escHtml(item.archivedAt || 'recently')}</div>
+            </div>
+            <div class="archive-item-btns">
+              <button class="arc-btn restore" onclick="restoreTask('${enc}')">↩ restore</button>
+              <button class="arc-btn erase"   onclick="deleteArchived('${enc}')">× delete</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── APPLY OVERRIDES + ARCHIVE FILTER ──
+  function applyOverridesAndArchive(sections) {
+    const overrides = getOverrides();
+    const archived  = getArchived();
+
+    // Flatten all non-done tasks
+    const allTasks = [];
+    ['active','waiting','someday'].forEach(col => {
+      (sections[col] || []).forEach(t => allTasks.push({ ...t, _src: col }));
+    });
+
+    const out = { active: [], waiting: [], someday: [], done: sections.done };
+    allTasks.forEach(t => {
+      if (archived[t.title]) return;                    // skip archived
+      const dest = overrides[t.title] || t._src;       // use override or original col
+      if (out[dest]) out[dest].push(t);
+    });
+    return out;
+  }
+
+  // ── DRAG AND DROP (SortableJS) ──
+  let _sortables = [];
+
+  function initSortable() {
+    _sortables.forEach(s => s.destroy());
+    _sortables = [];
+
+    ['active','waiting','someday'].forEach(col => {
+      const el = document.getElementById(`col-${col}-tasks`);
+      if (!el) return;
+
+      const s = Sortable.create(el, {
+        group:            'brain-tasks',
+        animation:        150,
+        ghostClass:       'task-ghost',
+        chosenClass:      'task-chosen',
+        dragClass:        'task-drag',
+        filter:           '.task-actions, .task-action-btn',
+        preventOnFilter:  false,
+
+        onStart() {
+          // Highlight all drop zones
+          document.querySelectorAll('.task-col').forEach(c => c.style.setProperty('--drop-hint','1'));
+        },
+
+        onEnd(evt) {
+          // Remove highlights
+          document.querySelectorAll('.task-col').forEach(c => {
+            c.classList.remove('drop-over');
+          });
+
+          const title = evt.item.dataset.title;
+          if (!title) return;
+
+          // Determine destination column from the container's id
+          const toId  = evt.to.id;                             // e.g. "col-active-tasks"
+          const toCol = toId.replace('col-','').replace('-tasks',''); // → "active"
+          setOverride(title, toCol);
+          updateCounts();
+        }
+      });
+
+      // Highlight column on hover during drag
+      el.addEventListener('dragover', () => {
+        document.querySelectorAll('.task-col').forEach(c => c.classList.remove('drop-over'));
+        el.closest('.task-col').classList.add('drop-over');
+      });
+
+      _sortables.push(s);
+    });
+  }
+
+  function updateCounts() {
+    ['active','waiting','someday'].forEach(col => {
+      const cont = document.getElementById(`col-${col}-tasks`);
+      const open = cont.querySelectorAll('.task-item:not(.done)').length;
+      document.getElementById(`count-${col}`).textContent = open;
+    });
+  }
+
+  // ── PARSER ──
+  function parseTasks(raw) {
+    const sections = { active: [], waiting: [], someday: [], done: [] };
+    let cur = null;
+    raw.split('\n').forEach(line => {
+      const l = line.trim();
+      if (/^## active/i.test(l))   { cur = 'active';  return; }
+      if (/^## waiting/i.test(l))  { cur = 'waiting'; return; }
+      if (/^## someday/i.test(l))  { cur = 'someday'; return; }
+      if (/^## done/i.test(l))     { cur = 'done';    return; }
+      if (!cur) return;
+      const m = l.match(/^-\s+\[([ x])\]\s+\*\*(.*?)\*\*\s*[-–]?\s*(.*)?$/);
+      if (m) {
+        sections[cur].push({
+          done:  m[1] === 'x',
+          title: m[2],
+          meta:  (m[3] || '').replace(/~~(.*?)~~/g, '$1').trim()
+        });
+      }
+    });
+    return sections;
+  }
+
+  // ── RENDER ──
+  let _lastSections = null;
+
+  function renderAll(sections) {
+    if (!sections) return;
+    _lastSections = sections;
+
+    const finalSections = applyOverridesAndArchive(sections);
+    const completed = getCompleted();
+
+    ['active','waiting','someday'].forEach(col => {
+      const tasks = finalSections[col] || [];
+      const el    = document.getElementById(`col-${col}-tasks`);
+
+      if (!tasks.length) {
+        el.innerHTML = '<div class="empty">Drop tasks here</div>';
+        document.getElementById(`count-${col}`).textContent = 0;
+        return;
+      }
+
+      el.innerHTML = tasks.map(t => {
+        const isDone    = t.done || !!completed[t.title];
+        const titleEnc  = encodeURIComponent(t.title);
+        const metaEnc   = encodeURIComponent(t.meta || '');
+        return `
+          <div class="task-item${isDone ? ' done' : ''}"
+               data-title="${escAttr(t.title)}"
+               onclick="handleTaskClick(event, '${titleEnc}')">
+            <div class="task-title">${isDone ? '✓ ' : ''}${escHtml(t.title)}</div>
+            ${t.meta ? `<div class="task-meta">${escHtml(t.meta)}</div>` : ''}
+            <div class="task-actions">
+              <button class="task-action-btn"
+                      title="Archive task"
+                      onclick="archiveTask('${titleEnc}','${metaEnc}',event)">📦</button>
+            </div>
+          </div>`;
+      }).join('');
+
+      const openCount = tasks.filter(t => !t.done && !completed[t.title]).length;
+      document.getElementById(`count-${col}`).textContent = openCount;
+    });
+
+    updateArchiveBadge();
+    initSortable();
+  }
+
+  function handleTaskClick(evt, encodedTitle) {
+    if (evt.target.closest('.task-actions')) return;   // archive btn — handled separately
+    toggleTask(dec(encodedTitle));
+  }
+
+  // ── LOAD ──
+  async function loadTasks() {
+    const syncEl = document.getElementById('sync-status');
+    let raw    = TASKS_MD;
+    let source = 'embedded';
+
+    if (TASKS_URL) {
+      syncEl.textContent = '↻ syncing…';
+      syncEl.style.color = 'var(--muted)';
+      try {
+        const res = await fetch(TASKS_URL + '?t=' + Date.now());
+        if (res.ok) { raw = await res.text(); source = 'live'; }
+      } catch(e) {}
+    }
+
+    if (source === 'live') {
+      syncEl.innerHTML = '● <span style="color:var(--teal)">live from GitHub</span>';
+    } else if (TASKS_URL) {
+      syncEl.innerHTML = '● <span style="color:var(--orange)">offline — showing cached</span>';
+    } else {
+      syncEl.innerHTML = '● <span style="color:var(--muted)">embedded data</span>';
+    }
+
+    renderAll(parseTasks(raw));
+  }
+
+  // ── HELPERS ──
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function escAttr(str) {
+    return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  }
+
+  function dec(encoded) {
+    try { return decodeURIComponent(encoded); }
+    catch { return encoded; }
+  }
+
+  // ── EMBEDDED TASK DATA (fallback) ──
   // Last synced: 2026-02-26
   const TASKS_MD = `
 # tasks
@@ -725,96 +1175,8 @@
 - [x] ~~CLAUDE.md created — dual-layer session activation~~ (2026-02-25)
 - [x] ~~Fix dashboard fetch bug — tasks now embedded inline~~ (2026-02-26)
 - [x] ~~GitHub live-fetch + click-to-complete added~~ (2026-02-26)
+- [x] ~~Drag-and-drop columns + archive module added~~ (2026-02-26)
 `;
-
-  // ── PARSER ──
-  function parseTasks(raw) {
-    const sections = { active: [], waiting: [], someday: [], done: [] };
-    let current = null;
-    raw.split('\n').forEach(line => {
-      const l = line.trim();
-      if (/^## active/i.test(l))   { current = 'active';  return; }
-      if (/^## waiting/i.test(l))  { current = 'waiting'; return; }
-      if (/^## someday/i.test(l))  { current = 'someday'; return; }
-      if (/^## done/i.test(l))     { current = 'done';    return; }
-      if (!current) return;
-      const match = l.match(/^-\s+\[([ x])\]\s+\*\*(.*?)\*\*\s*[-–]?\s*(.*)?$/);
-      if (match) {
-        sections[current].push({
-          done: match[1] === 'x',
-          title: match[2],
-          meta: (match[3] || '').replace(/~~(.*?)~~/g, '$1').trim()
-        });
-      }
-    });
-    return sections;
-  }
-
-  // ── RENDER ──
-  let _lastSections = null;
-
-  function renderAll(sections) {
-    if (!sections) return;
-    _lastSections = sections;
-    const completed = getCompleted();
-
-    ['active','waiting','someday'].forEach(col => {
-      const tasks = sections[col];
-      const el = document.getElementById(`col-${col}-tasks`);
-      if (!tasks.length) {
-        el.innerHTML = '<div class="empty">Nothing here yet</div>';
-        return;
-      }
-      el.innerHTML = tasks.map(t => {
-        const isDone = t.done || !!completed[t.title];
-        return `
-          <div class="task-item${isDone ? ' done' : ''}"
-               data-title="${escAttr(t.title)}"
-               onclick="toggleTask('${escAttr(t.title)}')"
-               title="${isDone ? 'Click to mark incomplete' : 'Click to mark done'}">
-            <div class="task-title">${isDone ? '✓ ' : ''}${escHtml(t.title)}</div>
-            ${t.meta ? `<div class="task-meta">${escHtml(t.meta)}</div>` : ''}
-          </div>`;
-      }).join('');
-
-      const openCount = tasks.filter(t => !t.done && !completed[t.title]).length;
-      document.getElementById(`count-${col}`).textContent = openCount;
-    });
-  }
-
-  // ── LOAD ──
-  async function loadTasks() {
-    const syncEl = document.getElementById('sync-status');
-    let raw = TASKS_MD;
-    let source = 'embedded';
-
-    if (TASKS_URL) {
-      syncEl.textContent = '↻ syncing…';
-      syncEl.style.color = 'var(--muted)';
-      try {
-        const res = await fetch(TASKS_URL + '?t=' + Date.now());
-        if (res.ok) { raw = await res.text(); source = 'live'; }
-      } catch(e) {}
-    }
-
-    if (source === 'live') {
-      syncEl.innerHTML = '● <span style="color:var(--teal)">live from GitHub</span>';
-    } else if (TASKS_URL) {
-      syncEl.innerHTML = '● <span style="color:var(--orange)">offline — showing cached</span>';
-    } else {
-      syncEl.innerHTML = '● <span style="color:var(--muted)">embedded data</span>';
-    }
-
-    renderAll(parseTasks(raw));
-  }
-
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function escAttr(str) {
-    return str.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
-  }
 
   loadTasks();
 </script>
