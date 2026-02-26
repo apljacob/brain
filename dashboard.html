@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRAIN — Jacob Cassar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0b12;
+      --bg-card:   #13131e;
+      --bg-hover:  #1a1a28;
+      --border:    #1f1f30;
+      --border-hi: #2e2e44;
+      --orange:    #f26419;
+      --orange-dim:#b84c13;
+      --teal:      #00c9a7;
+      --blue:      #4f8ef7;
+      --red:       #e05252;
+      --text:      #e8e8f2;
+      --muted:     #6b6b88;
+      --subtle:    #3a3a52;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      display: grid;
+      grid-template-rows: 56px 1fr;
+      grid-template-columns: 260px 1fr 280px;
+      grid-template-areas:
+        "header header header"
+        "left   main   right";
+      height: 100vh;
+    }
+
+    /* ── SCROLLBARS ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 4px; }
+
+    /* ── HEADER ── */
+    header {
+      grid-area: header;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .brand {
+      font-family: var(--mono);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: var(--orange);
+    }
+
+    .brand span { color: var(--muted); font-size: 11px; letter-spacing: 0.05em; margin-left: 10px; }
+
+    .header-center {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-family: var(--mono);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border-hi);
+      color: var(--muted);
+      background: var(--bg);
+    }
+
+    .pill.active { border-color: var(--teal); color: var(--teal); }
+    .pill.warn   { border-color: var(--orange); color: var(--orange); }
+
+    #clock {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      overflow-y: auto;
+      padding: 16px;
+      border-right: 1px solid var(--border);
+    }
+
+    .left  { grid-area: left; }
+    .main  { grid-area: main; border-right: none; padding: 20px; }
+    .right { grid-area: right; border-right: none; }
+
+    /* ── SECTION LABELS ── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section { margin-bottom: 24px; }
+
+    /* ── IDENTITY CARD ── */
+    .identity {
+      background: linear-gradient(135deg, #1a1228 0%, #0f1a2e 100%);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .identity-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .identity-role {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .identity-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    .stat-val {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--orange);
+    }
+
+    .stat-lbl {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 1px;
+    }
+
+    /* ── NAV LINKS ── */
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-link:hover { background: var(--bg-hover); color: var(--text); }
+    .nav-link .icon { font-size: 13px; width: 18px; text-align: center; }
+    .nav-link .badge {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      background: var(--border-hi);
+      color: var(--muted);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .nav-link .badge.hot { background: rgba(242,100,25,0.2); color: var(--orange); }
+
+    /* ── VENTURE CARDS ── */
+    .venture-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
+    }
+
+    .venture-card:hover { border-color: var(--border-hi); }
+    .venture-card.primary { border-color: var(--orange-dim); }
+
+    .vc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .vc-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .vc-score {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--orange);
+      background: rgba(242,100,25,0.1);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .vc-status {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--orange), #ffaa55);
+      transition: width 0.4s ease;
+    }
+
+    .vc-metrics {
+      display: flex;
+      gap: 12px;
+    }
+
+    .vc-metric {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .vc-metric span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── TASK COLUMNS ── */
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      height: calc(100% - 40px);
+    }
+
+    .task-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+
+    .col-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .col-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      background: var(--border-hi);
+      color: var(--muted);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .col-active .col-title { color: var(--orange); }
+    .col-waiting .col-title { color: var(--blue); }
+    .col-someday .col-title { color: var(--teal); }
+
+    /* ── TASK ITEMS ── */
+    .task-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .task-item:hover { border-color: var(--border-hi); background: var(--bg-hover); }
+
+    .task-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .task-meta {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .task-item.done .task-title { text-decoration: line-through; color: var(--muted); }
+
+    /* ── RIGHT PANEL — FRAMEWORKS ── */
+    .fw-item {
+      padding: 9px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .fw-item:hover { background: var(--bg-hover); border-color: var(--border-hi); }
+
+    .fw-name {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .fw-desc {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── RISK METER ── */
+    .risk-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+    }
+
+    .risk-row:last-child { border-bottom: none; }
+
+    .risk-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .risk-dot.high     { background: var(--orange); }
+    .risk-dot.medium   { background: #f0b429; }
+    .risk-dot.low      { background: var(--teal); }
+
+    .risk-label { flex: 1; color: var(--text); }
+    .risk-level { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+
+    /* ── GOAL BAR ── */
+    .goal-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 6px;
+    }
+
+    .goal-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .goal-value {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+
+    .goal-sub {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* ── DONE BADGE ── */
+    .done-badge {
+      font-size: 9px;
+      font-family: var(--mono);
+      color: var(--teal);
+      background: rgba(0, 201, 167, 0.1);
+      border: 1px solid rgba(0, 201, 167, 0.2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* ── SYNC STATUS ── */
+    #sync-status {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* ── INTERACTIVE TASKS ── */
+    .task-item { user-select: none; }
+    .task-item:not(.done):hover::before {
+      content: '✓';
+      position: absolute;
+      left: -18px;
+      color: var(--teal);
+      opacity: 0.5;
+      font-size: 11px;
+    }
+    .task-item { position: relative; }
+    .task-item.done { opacity: 0.45; }
+    .task-item.done .task-title { text-decoration: line-through; color: var(--muted); }
+    .task-item.completing { animation: flash 0.2s ease; }
+    @keyframes flash { 0%,100%{background:var(--bg)} 50%{background:rgba(0,201,167,0.1)} }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ HEADER ══════════════════════════════════════ -->
+<header>
+  <div class="brand">BRAIN <span>// Jacob Cassar</span></div>
+
+  <div class="header-center">
+    <div class="pill active">🔥 Sticker Shop — Active</div>
+    <div class="pill warn">⚠ Brand Name — Unresolved</div>
+    <div class="pill">📍 Los Angeles, PST</div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:14px;">
+    <span id="sync-status" title="Task data source"></span>
+    <div id="clock">––</div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════ LEFT PANEL ══════════════════════════════════════ -->
+<div class="panel left">
+
+  <!-- Identity -->
+  <div class="identity">
+    <div class="identity-name">Jacob Cassar</div>
+    <div class="identity-role">Apple Specialist · CSUN SCM · Entrepreneur</div>
+    <div class="identity-stats">
+      <div class="stat">
+        <div class="stat-val">10–20h</div>
+        <div class="stat-lbl">Weekly Bandwidth</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">$15k+</div>
+        <div class="stat-lbl">Capital Available</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">$1–3k</div>
+        <div class="stat-lbl">Monthly Target</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">6–12mo</div>
+        <div class="stat-lbl">Horizon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Files -->
+  <div class="section">
+    <div class="section-label">Core Files</div>
+    <a class="nav-link" href="brain.md"><span class="icon">🧠</span> brain.md <span class="badge">hot cache</span></a>
+    <a class="nav-link" href="private.md"><span class="icon">🔐</span> private.md <span class="badge">encrypted</span></a>
+    <a class="nav-link" href="ventures.md"><span class="icon">🚀</span> ventures.md <span class="badge hot">active</span></a>
+    <a class="nav-link" href="frameworks.md"><span class="icon">⚙️</span> frameworks.md</a>
+    <a class="nav-link" href="tasks.md"><span class="icon">✅</span> tasks.md</a>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════ MAIN PANEL ══════════════════════════════════════ -->
+<div class="panel main">
+
+  <div class="section-label" style="margin-bottom:16px;">Task Board</div>
+
+  <div class="task-grid">
+
+    <!-- ACTIVE -->
+    <div class="task-col col-active">
+      <div class="col-header">
+        <span class="col-title">Active</span>
+        <span class="col-count" id="count-active">0</span>
+      </div>
+      <div id="col-active-tasks"></div>
+    </div>
+
+    <!-- WAITING ON -->
+    <div class="task-col col-waiting">
+      <div class="col-header">
+        <span class="col-title">Waiting On</span>
+        <span class="col-count" id="count-waiting">0</span>
+      </div>
+      <div id="col-waiting-tasks"></div>
+    </div>
+
+    <!-- SOMEDAY -->
+    <div class="task-col col-someday">
+      <div class="col-header">
+        <span class="col-title">Someday</span>
+        <span class="col-count" id="count-someday">0</span>
+      </div>
+      <div id="col-someday-tasks"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ RIGHT PANEL ══════════════════════════════════════ -->
+<div class="panel right">
+
+  <!-- Income Goal -->
+  <div class="section">
+    <div class="section-label">Income Goal</div>
+    <div class="goal-block">
+      <div class="goal-label">Monthly Passive Target</div>
+      <div class="goal-value">$1,000 – $3,000</div>
+      <div class="goal-sub">Within 6–12 months · Starting from $0</div>
+    </div>
+  </div>
+
+  <!-- Ventures -->
+  <div class="section">
+    <div class="section-label">Ventures</div>
+
+    <div class="venture-card primary">
+      <div class="vc-top">
+        <div class="vc-name">🎨 Sticker Shop</div>
+        <div class="vc-score">23/25</div>
+      </div>
+      <div class="vc-status">🔥 Active — Niche research needed</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
+      <div class="vc-metrics">
+        <div class="vc-metric">Platform: <span>Etsy + Redbubble</span></div>
+        <div class="vc-metric">Cost: <span>$50–$165</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Radar -->
+  <div class="section">
+    <div class="section-label">Risk Radar</div>
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:10px 12px;">
+      <div class="risk-row">
+        <div class="risk-dot high"></div>
+        <div class="risk-label">Wrong niche — no sales</div>
+        <div class="risk-level">HIGH</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot high"></div>
+        <div class="risk-label">School crunch kills momentum</div>
+        <div class="risk-level">HIGH</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot high"></div>
+        <div class="risk-label">Copyright infringement</div>
+        <div class="risk-level">HIGH</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot medium"></div>
+        <div class="risk-label">Platform de-listing</div>
+        <div class="risk-level">MEDIUM</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIG ──
+  // After GitHub Pages is live, set this to your raw tasks URL:
+  // https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/tasks.md
+  const TASKS_URL = 'https://raw.githubusercontent.com/apljacob/brain/main/tasks.md';
+
+  // ── CLOCK ──
+  function updateClock() {
+    const now = new Date();
+    const pst = now.toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles',
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+    document.getElementById('clock').textContent = pst + ' PST';
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ── COMPLETION STATE (persists in browser) ──
+  const STORAGE_KEY = 'brain-completed-tasks';
+
+  function getCompleted() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function setCompleted(title, val) {
+    const c = getCompleted();
+    if (val) c[title] = true; else delete c[title];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(c));
+  }
+
+  function toggleTask(title) {
+    const c = getCompleted();
+    const nowDone = !c[title];
+    setCompleted(title, nowDone);
+    // Flash animation then re-render
+    const el = [...document.querySelectorAll('.task-item')].find(
+      el => el.dataset.title === title
+    );
+    if (el) { el.classList.add('completing'); setTimeout(() => renderAll(_lastSections), 250); }
+    else renderAll(_lastSections);
+  }
+
+  // ── EMBEDDED TASK DATA (fallback when offline or pre-GitHub setup) ──
+  // Last synced: 2026-02-26
+  const TASKS_MD = `
+# tasks
+
+*Last updated: February 25, 2026*
+
+---
+
+## active
+
+- [ ] **Decide on brand name vs. anonymous store** - foundational decision before sticker shop launch; affects Etsy setup, Redbubble profile, and long-term brand equity
+- [ ] **Lock in 2 launch niches for sticker shop** - Claude to pull live Etsy + Redbubble niche research; Jacob selects top 2
+- [ ] **Decide: digital packs or physical stickers first** - recommendation is digital first (zero cost, instant margin validation)
+- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
+
+---
+
+## waiting on
+
+- [ ] **Niche research session** - waiting on Jacob to greenlight a Chrome research session so Claude can pull live Etsy data - since 2026-02-23
+
+---
+
+## someday
+
+- [ ] **Set up Etsy seller account** - after niche and brand name locked
+- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
+- [ ] **Create Redbubble account** - can be done in parallel with Etsy
+- [ ] **Build first batch of 20 designs** - after niche confirmed
+- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
+- [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
+
+---
+
+## done
+
+- [x] ~~Create brain.md~~ (2026-02-23)
+- [x] ~~Absorb resume and update profile~~ (2026-02-23)
+- [x] ~~Separate brain from ventures~~ (2026-02-23)
+- [x] ~~Scrub Apple references from ventures~~ (2026-02-23)
+- [x] ~~Add PST timestamps to all files~~ (2026-02-23)
+- [x] ~~Revitalize all .md files with plugin structures~~ (2026-02-23)
+- [x] ~~Consolidate 12 files → 6 files (brain, private, ventures, frameworks, tasks, dashboard)~~ (2026-02-24)
+- [x] ~~Delete memory/ directory — all content absorbed into core files~~ (2026-02-24)
+- [x] ~~Build session init + closeout protocols~~ (2026-02-24)
+- [x] ~~Encrypt private.md with AES-256~~ (2026-02-24)
+- [x] ~~Add financial accounts to private.md~~ (2026-02-24)
+- [x] ~~De-emphasize Apple constraint to business-side only~~ (2026-02-24)
+- [x] ~~Full Opus-level brain system audit — 8 issues found and fixed~~ (2026-02-25)
+- [x] ~~Sticker ecommerce market research — appended to ventures.md~~ (2026-02-25)
+- [x] ~~task-observer initialized — skill-observations/ directory live~~ (2026-02-25)
+- [x] ~~market-research skill built and packaged~~ (2026-02-25)
+- [x] ~~CLAUDE.md created — dual-layer session activation~~ (2026-02-25)
+- [x] ~~Fix dashboard fetch bug — tasks now embedded inline~~ (2026-02-26)
+- [x] ~~GitHub live-fetch + click-to-complete added~~ (2026-02-26)
+`;
+
+  // ── PARSER ──
+  function parseTasks(raw) {
+    const sections = { active: [], waiting: [], someday: [], done: [] };
+    let current = null;
+    raw.split('\n').forEach(line => {
+      const l = line.trim();
+      if (/^## active/i.test(l))   { current = 'active';  return; }
+      if (/^## waiting/i.test(l))  { current = 'waiting'; return; }
+      if (/^## someday/i.test(l))  { current = 'someday'; return; }
+      if (/^## done/i.test(l))     { current = 'done';    return; }
+      if (!current) return;
+      const match = l.match(/^-\s+\[([ x])\]\s+\*\*(.*?)\*\*\s*[-–]?\s*(.*)?$/);
+      if (match) {
+        sections[current].push({
+          done: match[1] === 'x',
+          title: match[2],
+          meta: (match[3] || '').replace(/~~(.*?)~~/g, '$1').trim()
+        });
+      }
+    });
+    return sections;
+  }
+
+  // ── RENDER ──
+  let _lastSections = null;
+
+  function renderAll(sections) {
+    if (!sections) return;
+    _lastSections = sections;
+    const completed = getCompleted();
+
+    ['active','waiting','someday'].forEach(col => {
+      const tasks = sections[col];
+      const el = document.getElementById(`col-${col}-tasks`);
+      if (!tasks.length) {
+        el.innerHTML = '<div class="empty">Nothing here yet</div>';
+        return;
+      }
+      el.innerHTML = tasks.map(t => {
+        const isDone = t.done || !!completed[t.title];
+        return `
+          <div class="task-item${isDone ? ' done' : ''}"
+               data-title="${escAttr(t.title)}"
+               onclick="toggleTask('${escAttr(t.title)}')"
+               title="${isDone ? 'Click to mark incomplete' : 'Click to mark done'}">
+            <div class="task-title">${isDone ? '✓ ' : ''}${escHtml(t.title)}</div>
+            ${t.meta ? `<div class="task-meta">${escHtml(t.meta)}</div>` : ''}
+          </div>`;
+      }).join('');
+
+      const openCount = tasks.filter(t => !t.done && !completed[t.title]).length;
+      document.getElementById(`count-${col}`).textContent = openCount;
+    });
+  }
+
+  // ── LOAD ──
+  async function loadTasks() {
+    const syncEl = document.getElementById('sync-status');
+    let raw = TASKS_MD;
+    let source = 'embedded';
+
+    if (TASKS_URL) {
+      syncEl.textContent = '↻ syncing…';
+      syncEl.style.color = 'var(--muted)';
+      try {
+        const res = await fetch(TASKS_URL + '?t=' + Date.now());
+        if (res.ok) { raw = await res.text(); source = 'live'; }
+      } catch(e) {}
+    }
+
+    if (source === 'live') {
+      syncEl.innerHTML = '● <span style="color:var(--teal)">live from GitHub</span>';
+    } else if (TASKS_URL) {
+      syncEl.innerHTML = '● <span style="color:var(--orange)">offline — showing cached</span>';
+    } else {
+      syncEl.innerHTML = '● <span style="color:var(--muted)">embedded data</span>';
+    }
+
+    renderAll(parseTasks(raw));
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function escAttr(str) {
+    return str.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  }
+
+  loadTasks();
+</script>
+</body>
+</html>
