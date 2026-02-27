@@ -69,7 +69,7 @@ curl -s -X PUT \
   -H "Authorization: Bearer {PAT}" \
   -H "Accept: application/vnd.github+json" \
   https://api.github.com/repos/apljacob/brain/contents/{file} \
-  -d "{\"message\":\"Sync: update {file}\",\"content\":\"$(base64 -w 0 {file})\",\"sha\":\"$SHA\"}"
+  -d "{\"message\":\"Sync: update {file}\",\"content\":\"$(python3 -c 'import base64; print(base64.b64encode(open("{file}","rb").read()).decode(), end="")')\",\"sha\":\"$SHA\"}"
 ```
 Dashboard live URL: https://apljacob.github.io/brain/dashboard.html
 
@@ -217,6 +217,10 @@ Jacob Cassar. Apple Specialist + CSUN student (Global Supply Chain Mgmt). Buildi
 | 2026-02-27 | Store: anonymous for now | Sticker shop launches without a brand name — rebrand when traction confirmed. |
 | 2026-02-27 | Niches locked | Cozy Gaming (primary) + Y2K Retro Tech (secondary). Digital packs first. |
 | 2026-02-27 | Partner mode activated | Claude operates as proactive business partner — surfaces ideas, asks questions, drives agenda. Not just reactive. |
+| 2026-02-27 | Dashboard code audit | 5 bugs fixed: archive sort (ISO date), SortableJS CDN fallback, clock interval 10s→60s, silent fetch error, stale brand pill. 2 enhancements: Escape key for archive, error tooltip. |
+| 2026-02-27 | brain.md base64 fix | Closeout script used `base64 -w 0` (Linux-only). Replaced with Python one-liner — now works on macOS and Linux. |
+| 2026-02-27 | Dev server added | .claude/launch.json created with node static server on port 8080 for local dashboard development. |
+| 2026-02-27 | Two-way GitHub sync | Dashboard now writes back to tasks.md on every state change (drag, complete, archive). PAT stored in localStorage via ⚙ Sync settings panel — never in source. Debounced 1500ms. |
 
 ---
 
