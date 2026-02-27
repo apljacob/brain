@@ -1,28 +1,31 @@
 # tasks
 
-*Last updated: February 27, 2026*
+*Last updated: February 27, 2026 (post-session 4)*
 
 ---
 
 ## active
 
+- [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob creating account now
+- [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
 - [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
-- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute
-- [ ] **Build first batch of 20 designs** - niche confirmed: Cozy Gaming (primary) + Y2K Retro Tech (secondary); start with digital pack format
 
 ---
 
 ## waiting on
 
-*(nothing waiting)*
+- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com — credentials in private.md)
+- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
+- [ ] **Background removal** — waiting on: DALL-E renders; use remove.bg or Canva for each design
+- [ ] **Upload designs to Redbubble** — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 
 ---
 
 ## someday
 
+- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
 - [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
-- [ ] **Create Redbubble account** - can be done in parallel with Etsy
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
 - [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
@@ -55,3 +58,15 @@
 - [x] ~~Lock in 2 launch niches — Cozy Gaming (primary) + Y2K Retro Tech (secondary)~~ (2026-02-27)
 - [x] ~~Decide: digital packs or physical stickers first — digital first confirmed~~ (2026-02-27)
 - [x] ~~Niche research session — live research complete, niches locked~~ (2026-02-27)
+- [x] ~~Store name decided: Save Point Designs — username confirmed available on Redbubble~~ (2026-02-27)
+- [x] ~~Web credentials stored in private.md — default email/password + site-specific table~~ (2026-02-27)
+- [x] ~~11 sticker concepts designed (draft PNGs) — 5 Cozy Gaming, 3 Y2K, 3 research-driven crossovers~~ (2026-02-27)
+- [x] ~~Shop branding created — logo, Redbubble banner, color palette reference~~ (2026-02-27)
+- [x] ~~Redbubble listing copy + SEO tags written for all 11 designs~~ (2026-02-27)
+- [x] ~~ChatGPT/DALL-E prompts created for production-quality renders of all 11 designs + branding~~ (2026-02-27)
+- [x] ~~Full batch of 20 sticker concepts complete — 8 Cozy Gaming, 6 Y2K, 6 Crossover~~ (2026-02-27)
+- [x] ~~Listing copy + SEO tags written for all 20 designs~~ (2026-02-27)
+- [x] ~~DALL-E prompts updated for all 20 designs in chatgpt_prompts.md~~ (2026-02-27)
+- [x] ~~dashboard.html code audit — 5 bugs fixed, 2 enhancements added~~ (2026-02-27)
+- [x] ~~Dev server configured — .claude/launch.json with node on port 8080~~ (2026-02-27)
+- [x] ~~Project cleanup — .DS_Store files removed, brain.md base64 macOS fix applied~~ (2026-02-27)
