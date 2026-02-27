@@ -19,12 +19,12 @@
 
 - [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 - [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
+- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
 
 ---
 
 ## someday
 
-- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
 - [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
 
