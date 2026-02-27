@@ -14,7 +14,6 @@
 ## waiting on
 
 - [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
-- [ ] **DALL-E renders complete** - — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
 - [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
 - [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 
