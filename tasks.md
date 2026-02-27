@@ -12,6 +12,7 @@
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
 - [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
+- [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
 
 ---
 
@@ -25,7 +26,6 @@
 
 ## someday
 
-- [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
 - [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
 
 ---
