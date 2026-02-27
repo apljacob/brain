@@ -10,12 +10,12 @@
 - [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
+- [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
 
 ---
 
 ## waiting on
 
-- [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
 - [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
 - [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 - [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
