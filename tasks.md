@@ -9,6 +9,8 @@
 - [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob creating account now
 - [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
 - [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
+- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
+- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 
 ---
 
@@ -23,8 +25,6 @@
 
 ## someday
 
-- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
-- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
 - [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
 
