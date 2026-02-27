@@ -14,7 +14,6 @@
 
 ## waiting on
 
-- [ ] **Redbubble account live** - — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com — credentials in private.md)
 - [ ] **DALL-E renders complete** - — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
 - [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
 - [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
