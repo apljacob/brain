@@ -1,6 +1,6 @@
 # tasks
 
-*Last updated: February 27, 2026*
+*Last updated: February 27, 2026 (post-session 5)*
 
 ---
 
@@ -14,10 +14,10 @@
 
 ## waiting on
 
-- [ ] **Redbubble account live** - — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com — credentials in private.md)
-- [ ] **DALL-E renders complete** - — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
-- [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
-- [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
+- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com — credentials in private.md)
+- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
+- [ ] **Background removal** — waiting on: DALL-E renders; use remove.bg or Canva for each design
+- [ ] **Upload designs to Redbubble** — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 
 ---
 
@@ -70,3 +70,4 @@
 - [x] ~~dashboard.html code audit — 5 bugs fixed, 2 enhancements added~~ (2026-02-27)
 - [x] ~~Dev server configured — .claude/launch.json with node on port 8080~~ (2026-02-27)
 - [x] ~~Project cleanup — .DS_Store files removed, brain.md base64 macOS fix applied~~ (2026-02-27)
+- [x] ~~Two-way GitHub sync built into dashboard — PAT settings panel, write-back on drag/complete/archive~~ (2026-02-27)
