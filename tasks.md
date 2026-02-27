@@ -1,32 +1,31 @@
 # tasks
 
-*Last updated: February 25, 2026*
+*Last updated: February 27, 2026*
 
 ---
 
 ## active
 
-- [ ] **Decide on brand name vs. anonymous store** - foundational decision before sticker shop launch; affects Etsy setup, Redbubble profile, and long-term brand equity
-- [ ] **Lock in 2 launch niches for sticker shop** - Claude to pull live Etsy + Redbubble niche research; Jacob selects top 2
-- [ ] **Decide: digital packs or physical stickers first** - recommendation is digital first (zero cost, instant margin validation)
 - [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
+- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute
+- [ ] **Build first batch of 20 designs** - niche confirmed: Cozy Gaming (primary) + Y2K Retro Tech (secondary); start with digital pack format
 
 ---
 
 ## waiting on
 
-- [ ] **Niche research session** - waiting on Jacob to greenlight a Chrome research session so Claude can pull live Etsy data - since 2026-02-23
+*(nothing waiting)*
 
 ---
 
 ## someday
 
-- [ ] **Set up Etsy seller account** - after niche and brand name locked
+- [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Create Redbubble account** - can be done in parallel with Etsy
-- [ ] **Build first batch of 20 designs** - after niche confirmed
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
+- [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
 
 ---
 
@@ -49,3 +48,10 @@
 - [x] ~~task-observer initialized — skill-observations/ directory live~~ (2026-02-25)
 - [x] ~~market-research skill built and packaged~~ (2026-02-25)
 - [x] ~~CLAUDE.md created — dual-layer session activation~~ (2026-02-25)
+- [x] ~~Deploy dashboard.html to GitHub Pages — live at apljacob.github.io/brain~~ (2026-02-26)
+- [x] ~~Add drag-and-drop + archive module to dashboard~~ (2026-02-26)
+- [x] ~~Remove AES-256 encryption from private.md — brain-wide scrub complete~~ (2026-02-27)
+- [x] ~~Decide: brand name vs. anonymous store — anonymous for now, rebrand when traction confirmed~~ (2026-02-27)
+- [x] ~~Lock in 2 launch niches — Cozy Gaming (primary) + Y2K Retro Tech (secondary)~~ (2026-02-27)
+- [x] ~~Decide: digital packs or physical stickers first — digital first confirmed~~ (2026-02-27)
+- [x] ~~Niche research session — live research complete, niches locked~~ (2026-02-27)
