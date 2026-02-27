@@ -607,6 +607,10 @@
 
     .arc-btn.restore:hover { color: var(--teal); border-color: var(--teal); background: rgba(0,201,167,0.08); }
     .arc-btn.erase:hover   { color: var(--red);  border-color: var(--red);  background: rgba(224,82,82,0.08); }
+
+    /* ── PAT INPUT ── */
+    #patInput:focus { border-color: var(--teal); outline: none; }
+    #patInput::placeholder { color: var(--subtle); }
   </style>
 </head>
 <body>
@@ -630,6 +634,41 @@
   </div>
 </div>
 
+<!-- ══════════════════════════════════════ SETTINGS OVERLAY ══════════════════════════════════════ -->
+<div class="archive-overlay" id="settingsOverlay" onclick="handleSettingsOverlayClick(event)">
+  <div class="archive-panel">
+    <div class="archive-panel-header">
+      <div class="archive-panel-title">
+        ⚙ Sync Settings
+      </div>
+      <button class="archive-panel-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="archive-panel-body" style="display:flex;flex-direction:column;gap:14px;">
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        Enter your GitHub PAT to enable two-way sync. Changes you make on this dashboard
+        (drag, complete, archive) will auto-save back to <code style="font-family:var(--mono);color:var(--teal);font-size:10px;">tasks.md</code> on GitHub.
+      </div>
+      <div>
+        <div style="font-size:9px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">GitHub PAT</div>
+        <input id="patInput" type="password" placeholder="github_pat_…"
+          style="width:100%;background:var(--bg);border:1px solid var(--border-hi);border-radius:6px;
+                 padding:8px 10px;font-family:var(--mono);font-size:11px;color:var(--text);
+                 outline:none;box-sizing:border-box;"
+          onfocus="if(this.dataset.hasExisting==='1'){this.value='';this.dataset.hasExisting='';}"
+        />
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="arc-btn restore" style="flex:1;padding:6px 0;font-size:11px;" onclick="savePat()">Save PAT</button>
+        <button class="arc-btn erase"   style="padding:6px 12px;font-size:11px;" onclick="clearPat()">Clear</button>
+      </div>
+      <div style="font-size:9px;font-family:var(--mono);color:var(--subtle);line-height:1.6;border-top:1px solid var(--border);padding-top:10px;">
+        PAT is stored in <em>localStorage only</em> — never in source code.<br>
+        Scope needed: <span style="color:var(--teal)">Contents (R+W)</span> on the <span style="color:var(--teal)">brain</span> repo.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════════════════════════ HEADER ══════════════════════════════════════ -->
 <header>
   <div class="brand">BRAIN <span>// Jacob Cassar</span></div>
@@ -641,6 +680,9 @@
   </div>
 
   <div style="display:flex;align-items:center;gap:10px;">
+    <button class="archive-header-btn" onclick="openSettings()" title="GitHub sync settings">
+      ⚙ Sync <span class="archive-badge" id="syncSetupBadge">off</span>
+    </button>
     <button class="archive-header-btn" onclick="openArchive()">
       📦 Archive <span class="archive-badge" id="archiveBadge">0</span>
     </button>
@@ -782,6 +824,10 @@
   const STORAGE_KEY  = 'brain-completed-tasks';
   const OVERRIDE_KEY = 'brain-task-overrides';
   const ARCHIVE_KEY  = 'brain-archived-tasks';
+  const PAT_KEY      = 'brain-github-pat';
+  const WRITE_URL    = 'https://api.github.com/repos/apljacob/brain/contents/tasks.md';
+  let _rawMarkdown   = '';
+  let _writeTimer    = null;
 
   // ── CLOCK ──
   function updateClock() {
@@ -811,6 +857,7 @@
   function toggleTask(title) {
     const c = getCompleted();
     setCompleted(title, !c[title]);
+    scheduleWrite();
     const el = [...document.querySelectorAll('.task-item')].find(e => e.dataset.title === title);
     if (el) { el.classList.add('completing'); setTimeout(() => renderAll(_lastSections), 250); }
     else renderAll(_lastSections);
@@ -826,6 +873,7 @@
     const o = getOverrides();
     if (col === null) delete o[title]; else o[title] = col;
     localStorage.setItem(OVERRIDE_KEY, JSON.stringify(o));
+    scheduleWrite();
   }
 
   // ── ARCHIVE STATE ──
@@ -846,6 +894,7 @@
       archivedAtISO: now.toISOString()
     };
     localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
+    scheduleWrite();
     renderAll(_lastSections);
   }
 
@@ -854,6 +903,7 @@
     const a = getArchived();
     delete a[title];
     localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
+    scheduleWrite();
     renderAll(_lastSections);
     renderArchivePanel();
   }
@@ -1096,10 +1146,174 @@
     toggleTask(dec(encodedTitle));
   }
 
+  // ── SERIALIZE ──
+  function serializeTasks() {
+    if (!_lastSections) return null;
+
+    const overrides  = getOverrides();
+    const completed  = getCompleted();
+    const archived   = getArchived();
+
+    // Build final column map (bake overrides in)
+    const cols = { active: [], waiting: [], someday: [] };
+    ['active', 'waiting', 'someday'].forEach(src => {
+      (_lastSections[src] || []).forEach(t => {
+        if (archived[t.title]) return;
+        const dest = overrides[t.title] || src;
+        if (cols[dest]) cols[dest].push({ ...t, _src: src });
+      });
+    });
+
+    const now = new Date().toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    let md = `# tasks\n\n*Last updated: ${now}*\n\n---\n`;
+
+    const colLabels = { active: 'active', waiting: 'waiting on', someday: 'someday' };
+    ['active', 'waiting', 'someday'].forEach(col => {
+      md += `\n## ${colLabels[col]}\n\n`;
+      cols[col].forEach(t => {
+        const done  = t.done || !!completed[t.title];
+        const check = done ? 'x' : ' ';
+        const meta  = t.meta ? ` - ${t.meta}` : '';
+        md += `- [${check}] **${t.title}**${meta}\n`;
+      });
+      md += '\n---\n';
+    });
+
+    // Preserve done section verbatim from raw markdown
+    const doneIdx = _rawMarkdown.indexOf('\n## done');
+    md += doneIdx >= 0 ? _rawMarkdown.slice(doneIdx) : '\n## done\n';
+
+    return md;
+  }
+
+  // ── WRITE TO GITHUB ──
+  function updateSyncStatus(html, title) {
+    const el = document.getElementById('sync-status');
+    if (el) { el.innerHTML = html; if (title) el.title = title; }
+  }
+
+  async function writeTasks() {
+    const pat = localStorage.getItem(PAT_KEY);
+    if (!pat) return;
+
+    const content = serializeTasks();
+    if (!content) return;
+
+    updateSyncStatus('↑ <span style="color:var(--orange)">saving…</span>');
+
+    try {
+      // Get current SHA
+      const shaRes = await fetch(WRITE_URL, {
+        headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json' }
+      });
+      if (!shaRes.ok) throw new Error(`SHA fetch failed: ${shaRes.status}`);
+      const { sha } = await shaRes.json();
+
+      // UTF-8 safe base64
+      const b64 = btoa(unescape(encodeURIComponent(content)));
+
+      const writeRes = await fetch(WRITE_URL, {
+        method:  'PUT',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept':        'application/vnd.github+json',
+          'Content-Type':  'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Dashboard sync: ' + new Date().toISOString().slice(0, 16).replace('T', ' '),
+          content: b64,
+          sha
+        })
+      });
+
+      if (writeRes.status === 409) {
+        // Stale SHA — retry once
+        return writeTasks();
+      }
+      if (!writeRes.ok) throw new Error(`Write failed: ${writeRes.status}`);
+
+      // Bake overrides in — no longer needed after tasks.md updated
+      localStorage.removeItem(OVERRIDE_KEY);
+      _rawMarkdown = content;
+
+      updateSyncStatus('● <span style="color:var(--teal)">saved ✓</span>', 'Synced to GitHub');
+      setTimeout(() => {
+        updateSyncStatus('● <span style="color:var(--teal)">live from GitHub</span>', 'Task data source');
+      }, 2000);
+
+    } catch(e) {
+      console.warn('[BRAIN] Write failed:', e);
+      updateSyncStatus(
+        `● <span style="color:var(--red)" onclick="writeTasks()" style="cursor:pointer" title="${e.message}">save failed — retry</span>`,
+        e.message
+      );
+    }
+  }
+
+  function scheduleWrite() {
+    clearTimeout(_writeTimer);
+    _writeTimer = setTimeout(writeTasks, 1500);
+  }
+
+  // ── SETTINGS PANEL ──
+  function getPat() { return localStorage.getItem(PAT_KEY) || ''; }
+
+  function openSettings() {
+    const pat = getPat();
+    document.getElementById('patInput').value   = pat ? '••••••••••••••••••••' + pat.slice(-4) : '';
+    document.getElementById('patInput').dataset.hasExisting = pat ? '1' : '';
+    updateSyncBadge();
+    document.getElementById('settingsOverlay').classList.add('open');
+  }
+
+  function closeSettings() {
+    document.getElementById('settingsOverlay').classList.remove('open');
+  }
+
+  function handleSettingsOverlayClick(evt) {
+    if (evt.target === document.getElementById('settingsOverlay')) closeSettings();
+  }
+
+  function savePat() {
+    const input = document.getElementById('patInput');
+    const val   = input.value.trim();
+    // If they didn't change the masked display, keep existing
+    if (val.startsWith('••') && input.dataset.hasExisting === '1') {
+      closeSettings();
+      return;
+    }
+    if (val) {
+      localStorage.setItem(PAT_KEY, val);
+    } else {
+      localStorage.removeItem(PAT_KEY);
+    }
+    updateSyncBadge();
+    closeSettings();
+  }
+
+  function clearPat() {
+    localStorage.removeItem(PAT_KEY);
+    document.getElementById('patInput').value = '';
+    document.getElementById('patInput').dataset.hasExisting = '';
+    updateSyncBadge();
+  }
+
+  function updateSyncBadge() {
+    const badge = document.getElementById('syncSetupBadge');
+    if (!badge) return;
+    const pat = getPat();
+    badge.textContent = pat ? '✓ on' : 'off';
+    badge.className   = 'archive-badge' + (pat ? ' has-items' : '');
+  }
+
   // ── LOAD ──
   async function loadTasks() {
     const syncEl = document.getElementById('sync-status');
     let raw    = TASKS_MD;
+    _rawMarkdown = raw;
     let source = 'embedded';
 
     if (TASKS_URL) {
@@ -1107,7 +1321,7 @@
       syncEl.style.color = 'var(--muted)';
       try {
         const res = await fetch(TASKS_URL + '?t=' + Date.now());
-        if (res.ok) { raw = await res.text(); source = 'live'; }
+        if (res.ok) { raw = await res.text(); _rawMarkdown = raw; source = 'live'; }
       } catch(e) {
         console.warn('[BRAIN] GitHub fetch failed:', e);
         syncEl.title = e.message || 'Network error';
@@ -1198,8 +1412,11 @@
 - [x] ~~Drag-and-drop columns + archive module added~~ (2026-02-26)
 `;
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArchive(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeArchive(); closeSettings(); }
+  });
 
+  updateSyncBadge();
   loadTasks();
 </script>
 </body>
