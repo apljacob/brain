@@ -17,13 +17,13 @@
 - [ ] **DALL-E renders complete** - — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
 - [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
 - [ ] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
-- [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
 
 ---
 
 ## someday
 
 - [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
+- [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
