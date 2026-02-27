@@ -636,7 +636,7 @@
 
   <div class="header-center">
     <div class="pill active">🔥 Sticker Shop — Active</div>
-    <div class="pill warn">⚠ Brand Name — Unresolved</div>
+    <div class="pill active">🎨 Save Point Designs</div>
     <div class="pill">📍 Los Angeles, PST</div>
   </div>
 
@@ -793,7 +793,8 @@
     document.getElementById('clock').textContent = pst + ' PST';
   }
   updateClock();
-  setInterval(updateClock, 10000);
+  // Align to next whole minute, then tick every 60s
+  setTimeout(() => { updateClock(); setInterval(updateClock, 60000); }, (60 - new Date().getSeconds()) * 1000);
 
   // ── COMPLETION STATE ──
   function getCompleted() {
@@ -838,9 +839,11 @@
     const title = dec(encodedTitle);
     const meta  = dec(encodedMeta);
     const a = getArchived();
+    const now = new Date();
     a[title] = {
       title, meta,
-      archivedAt: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+      archivedAt:    now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
+      archivedAtISO: now.toISOString()
     };
     localStorage.setItem(ARCHIVE_KEY, JSON.stringify(a));
     renderAll(_lastSections);
@@ -904,8 +907,8 @@
       return;
     }
 
-    // Sort by archivedAt desc (most recent first)
-    items.sort((a, b) => (b.archivedAt || '').localeCompare(a.archivedAt || ''));
+    // Sort by ISO date desc (most recent first)
+    items.sort((a, b) => (b.archivedAtISO || b.archivedAt || '').localeCompare(a.archivedAtISO || a.archivedAt || ''));
 
     body.innerHTML = items.map(item => {
       const enc = encodeURIComponent(item.title);
@@ -951,6 +954,20 @@
   function initSortable() {
     _sortables.forEach(s => s.destroy());
     _sortables = [];
+
+    if (typeof Sortable === 'undefined') {
+      console.warn('[BRAIN] SortableJS failed to load — drag-and-drop unavailable');
+      document.querySelectorAll('.col-header').forEach(h => {
+        if (!h.querySelector('.sort-warn')) {
+          const w = document.createElement('span');
+          w.className = 'sort-warn';
+          w.style.cssText = 'font-size:9px;color:var(--orange);font-family:var(--mono);margin-left:6px;';
+          w.textContent = '(drag offline)';
+          h.appendChild(w);
+        }
+      });
+      return;
+    }
 
     ['active','waiting','someday'].forEach(col => {
       const el = document.getElementById(`col-${col}-tasks`);
@@ -1091,7 +1108,10 @@
       try {
         const res = await fetch(TASKS_URL + '?t=' + Date.now());
         if (res.ok) { raw = await res.text(); source = 'live'; }
-      } catch(e) {}
+      } catch(e) {
+        console.warn('[BRAIN] GitHub fetch failed:', e);
+        syncEl.title = e.message || 'Network error';
+      }
     }
 
     if (source === 'live') {
@@ -1177,6 +1197,8 @@
 - [x] ~~GitHub live-fetch + click-to-complete added~~ (2026-02-26)
 - [x] ~~Drag-and-drop columns + archive module added~~ (2026-02-26)
 `;
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeArchive(); });
 
   loadTasks();
 </script>
