@@ -8,6 +8,7 @@
 
 - [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob creating account now
 - [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
+- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
 
 ---
 
@@ -21,7 +22,6 @@
 
 ## someday
 
-- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
 - [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
