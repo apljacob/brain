@@ -726,12 +726,22 @@
     <a class="nav-link" href="tasks.md"><span class="icon">✅</span> tasks.md</a>
   </div>
 
+  <div class="section">
+    <div class="section-label">Planning</div>
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:11px; color:var(--muted); line-height:1.7;">
+      <div style="color:var(--text); font-size:12px; font-weight:500; margin-bottom:4px;">Day · Week · Year</div>
+      Type <span style="font-family:var(--mono); color:var(--orange); background:var(--bg-hover); padding:1px 5px; border-radius:3px;">plan</span> + any info dump<br>
+      Claude organizes your week.<br>
+      <span style="color:var(--subtle);">Sunday review · 30 min cadence</span>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══════════════════════════════════════ MAIN PANEL ══════════════════════════════════════ -->
 <div class="panel main">
 
-  <div class="section-label" style="margin-bottom:16px;">Task Board — drag between columns · hover to archive</div>
+  <div class="section-label" style="margin-bottom:16px;">Task Board — drag between columns · click to complete · hover to archive</div>
 
   <div class="task-grid">
 
@@ -778,14 +788,27 @@
     <div class="section-label">Ventures</div>
     <div class="venture-card primary">
       <div class="vc-top">
-        <div class="vc-name">🎨 Sticker Shop</div>
+        <div class="vc-name">🎮 Save Point Designs</div>
         <div class="vc-score">23/25</div>
       </div>
-      <div class="vc-status">🔥 Active — Niche research needed</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
+      <div class="vc-status">🔥 Active — Niches locked · Generating designs</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:35%"></div></div>
       <div class="vc-metrics">
-        <div class="vc-metric">Platform: <span>Etsy + Redbubble</span></div>
-        <div class="vc-metric">Cost: <span>$50–$165</span></div>
+        <div class="vc-metric">Phase: <span>2 — First 20 Designs</span></div>
+        <div class="vc-metric">Platform: <span>Redbubble → Etsy</span></div>
+        <div class="vc-metric">Cost: <span>$0–$165 launch</span></div>
+      </div>
+    </div>
+    <div class="venture-card" style="margin-top:8px; border-color:var(--blue);">
+      <div class="vc-top">
+        <div class="vc-name">🏠 Digital Rentals</div>
+        <div class="vc-score">20/25</div>
+      </div>
+      <div class="vc-status">🔍 Pipeline — Research complete · Evaluating</div>
+      <div class="progress-bar" style="--fill-color:var(--blue)"><div class="progress-fill" style="width:15%; background:var(--blue)"></div></div>
+      <div class="vc-metrics">
+        <div class="vc-metric">Entry: <span>Flippa / Motion Invest</span></div>
+        <div class="vc-metric">Budget: <span>$5–10K first deal</span></div>
       </div>
     </div>
   </div>
@@ -795,23 +818,23 @@
     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:10px 12px;">
       <div class="risk-row">
         <div class="risk-dot high"></div>
-        <div class="risk-label">Wrong niche — no sales</div>
+        <div class="risk-label">Designs not uploaded yet</div>
         <div class="risk-level">HIGH</div>
       </div>
       <div class="risk-row">
         <div class="risk-dot high"></div>
-        <div class="risk-label">School crunch kills momentum</div>
-        <div class="risk-level">HIGH</div>
-      </div>
-      <div class="risk-row">
-        <div class="risk-dot high"></div>
-        <div class="risk-label">Copyright infringement</div>
+        <div class="risk-label">Google algo kills site value</div>
         <div class="risk-level">HIGH</div>
       </div>
       <div class="risk-row">
         <div class="risk-dot medium"></div>
-        <div class="risk-label">Platform de-listing</div>
-        <div class="risk-level">MEDIUM</div>
+        <div class="risk-label">School crunch kills momentum</div>
+        <div class="risk-level">MED</div>
+      </div>
+      <div class="risk-row">
+        <div class="risk-dot medium"></div>
+        <div class="risk-label">Overpaying on first site deal</div>
+        <div class="risk-level">MED</div>
       </div>
     </div>
   </div>
@@ -1236,13 +1259,13 @@
       }
       if (!writeRes.ok) throw new Error(`Write failed: ${writeRes.status}`);
 
-      // Bake overrides in: update in-memory state to match what was written.
-      // _lastSections must be updated before OVERRIDE_KEY is cleared, otherwise
-      // a subsequent save within the same page load would re-apply no overrides
-      // against stale sections and snap tasks back to their original columns.
+      // Update in-memory state to match what was written.
+      // Overrides are kept in localStorage as a safety net — if the API read fails
+      // on the next page load, overrides still restore column positions correctly.
+      // _lastSections is updated so subsequent saves within this session produce
+      // consistent output (no stale original-position data).
       _rawMarkdown = content;
       _lastSections = parseTasks(content);
-      localStorage.removeItem(OVERRIDE_KEY);
 
       updateSyncStatus('● <span style="color:var(--teal)">saved ✓</span>', 'Synced to GitHub');
       setTimeout(() => {
@@ -1317,16 +1340,32 @@
   // ── LOAD ──
   async function loadTasks() {
     const syncEl = document.getElementById('sync-status');
-    let raw    = TASKS_MD;
+    let raw = TASKS_MD;
     _rawMarkdown = raw;
     let source = 'embedded';
 
-    if (TASKS_URL) {
+    const pat = localStorage.getItem(PAT_KEY);
+    if (pat || TASKS_URL) {
       syncEl.textContent = '↻ syncing…';
       syncEl.style.color = 'var(--muted)';
       try {
-        const res = await fetch(TASKS_URL + '?t=' + Date.now());
-        if (res.ok) { raw = await res.text(); _rawMarkdown = raw; source = 'live'; }
+        if (pat) {
+          // GitHub API — always returns latest committed content, bypasses CDN cache
+          const res = await fetch(WRITE_URL, {
+            headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json' }
+          });
+          if (res.ok) {
+            const json = await res.json();
+            const bytes = Uint8Array.from(atob(json.content.replace(/\n/g, '')), c => c.charCodeAt(0));
+            raw = new TextDecoder().decode(bytes);
+            _rawMarkdown = raw;
+            source = 'live';
+          }
+        } else {
+          // No PAT — raw CDN fallback (may be stale up to ~5 min)
+          const res = await fetch(TASKS_URL + '?t=' + Date.now());
+          if (res.ok) { raw = await res.text(); _rawMarkdown = raw; source = 'live'; }
+        }
       } catch(e) {
         console.warn('[BRAIN] GitHub fetch failed:', e);
         syncEl.title = e.message || 'Network error';
@@ -1359,26 +1398,26 @@
   }
 
   // ── EMBEDDED TASK DATA (fallback) ──
-  // Last synced: 2026-02-27
+  // Last synced: 2026-02-28
   const TASKS_MD = `
 # tasks
 
-*Last updated: February 27, 2026 (post-session 5)*
+*Last updated: February 28, 2026*
 
 ---
 
 ## active
 
-- [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob creating account now
+- [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob completing signup
 - [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
-- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned (camera, mic, etc.); existing network
+- [ ] **Brain system cleanup complete** - identity hardened, planning system added, dashboard updated, GitHub synced
 
 ---
 
 ## waiting on
 
-- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com — credentials in private.md)
-- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 11 sticker prompts + 2 branding prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
+- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com)
+- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 20 sticker prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
 - [ ] **Background removal** — waiting on: DALL-E renders; use remove.bg or Canva for each design
 - [ ] **Upload designs to Redbubble** — waiting on: account live + renders clean; listing copy ready in listing_copy.md
 
@@ -1386,12 +1425,15 @@
 
 ## someday
 
-- [ ] **Set up Etsy seller account** - niche + store approach locked; ready to execute after Redbubble is live
-- [ ] **Run live Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, and competitor analysis within Cozy Gaming + Y2K Retro Tech
+- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
+- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
+- [ ] **Set up Etsy seller account** - ready to execute after Redbubble is live
+- [ ] **Run Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, competitor analysis for Cozy Gaming + Y2K Retro Tech
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
-- [ ] **Add shop to Society6 + TeePublic** - expansion after first designs are live
-- [ ] **Explore additional income streams** - wallpaper packs, icon packs, Amazon KDP, Gumroad bundles, SVG/Clipart, Notion templates
+- [ ] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
+- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned; existing network
+- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
@@ -1403,37 +1445,30 @@
 - [x] ~~Scrub Apple references from ventures~~ (2026-02-23)
 - [x] ~~Add PST timestamps to all files~~ (2026-02-23)
 - [x] ~~Revitalize all .md files with plugin structures~~ (2026-02-23)
-- [x] ~~Consolidate 12 files → 6 files (brain, private, ventures, frameworks, tasks, dashboard)~~ (2026-02-24)
+- [x] ~~Consolidate 12 files → 6 files~~ (2026-02-24)
 - [x] ~~Delete memory/ directory — all content absorbed into core files~~ (2026-02-24)
 - [x] ~~Build session init + closeout protocols~~ (2026-02-24)
-- [x] ~~Encrypt private.md with AES-256~~ (2026-02-24)
 - [x] ~~Add financial accounts to private.md~~ (2026-02-24)
-- [x] ~~De-emphasize Apple constraint to business-side only~~ (2026-02-24)
 - [x] ~~Full Opus-level brain system audit — 8 issues found and fixed~~ (2026-02-25)
 - [x] ~~Sticker ecommerce market research — appended to ventures.md~~ (2026-02-25)
 - [x] ~~task-observer initialized — skill-observations/ directory live~~ (2026-02-25)
-- [x] ~~market-research skill built and packaged~~ (2026-02-25)
 - [x] ~~CLAUDE.md created — dual-layer session activation~~ (2026-02-25)
-- [x] ~~Deploy dashboard.html to GitHub Pages — live at apljacob.github.io/brain~~ (2026-02-26)
+- [x] ~~Deploy dashboard.html to GitHub Pages~~ (2026-02-26)
 - [x] ~~Add drag-and-drop + archive module to dashboard~~ (2026-02-26)
-- [x] ~~Remove AES-256 encryption from private.md — brain-wide scrub complete~~ (2026-02-27)
-- [x] ~~Decide: brand name vs. anonymous store — anonymous for now, rebrand when traction confirmed~~ (2026-02-27)
-- [x] ~~Lock in 2 launch niches — Cozy Gaming (primary) + Y2K Retro Tech (secondary)~~ (2026-02-27)
-- [x] ~~Decide: digital packs or physical stickers first — digital first confirmed~~ (2026-02-27)
-- [x] ~~Niche research session — live research complete, niches locked~~ (2026-02-27)
-- [x] ~~Store name decided: Save Point Designs — username confirmed available on Redbubble~~ (2026-02-27)
-- [x] ~~Web credentials stored in private.md — default email/password + site-specific table~~ (2026-02-27)
-- [x] ~~11 sticker concepts designed (draft PNGs) — 5 Cozy Gaming, 3 Y2K, 3 research-driven crossovers~~ (2026-02-27)
-- [x] ~~Shop branding created — logo, Redbubble banner, color palette reference~~ (2026-02-27)
-- [x] ~~Redbubble listing copy + SEO tags written for all 11 designs~~ (2026-02-27)
-- [x] ~~ChatGPT/DALL-E prompts created for production-quality renders of all 11 designs + branding~~ (2026-02-27)
-- [x] ~~Full batch of 20 sticker concepts complete — 8 Cozy Gaming, 6 Y2K, 6 Crossover~~ (2026-02-27)
+- [x] ~~Remove AES-256 encryption from private.md~~ (2026-02-27)
+- [x] ~~Store: anonymous for now — rebrand when traction confirmed~~ (2026-02-27)
+- [x] ~~Niches locked — Cozy Gaming (primary) + Y2K Retro Tech (secondary)~~ (2026-02-27)
+- [x] ~~Digital packs first confirmed~~ (2026-02-27)
+- [x] ~~Store name: Save Point Designs — username confirmed on Redbubble~~ (2026-02-27)
+- [x] ~~Web credentials stored in private.md~~ (2026-02-27)
+- [x] ~~20 sticker concepts complete — 8 Cozy Gaming, 6 Y2K, 6 Crossover~~ (2026-02-27)
 - [x] ~~Listing copy + SEO tags written for all 20 designs~~ (2026-02-27)
-- [x] ~~DALL-E prompts updated for all 20 designs in chatgpt_prompts.md~~ (2026-02-27)
-- [x] ~~dashboard.html code audit — 5 bugs fixed, 2 enhancements added~~ (2026-02-27)
-- [x] ~~Dev server configured — .claude/launch.json with node on port 8080~~ (2026-02-27)
-- [x] ~~Project cleanup — .DS_Store files removed, brain.md base64 macOS fix applied~~ (2026-02-27)
-- [x] ~~Two-way GitHub sync built into dashboard — PAT settings panel, write-back on drag/complete/archive~~ (2026-02-27)
+- [x] ~~DALL-E prompts created for all 20 designs + branding~~ (2026-02-27)
+- [x] ~~Dashboard code audit — 5 bugs fixed, 2 enhancements~~ (2026-02-27)
+- [x] ~~Two-way GitHub sync built into dashboard~~ (2026-02-27)
+- [x] ~~Digital rental properties research — full report in ventures.md (20/25)~~ (2026-02-28)
+- [x] ~~Brain identity hardened — partner voice, planning system, file map coded in~~ (2026-02-28)
+
 `;
 
   document.addEventListener('keydown', e => {
