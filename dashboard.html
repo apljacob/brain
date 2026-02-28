@@ -332,6 +332,30 @@
     .task-item.completing { animation: flash 0.25s ease; }
     @keyframes flash { 0%,100%{background:var(--bg)} 50%{background:rgba(0,201,167,0.1)} }
 
+    /* ── PENDING COMPLETE (10s countdown before archive) ── */
+    .task-item.pending-complete {
+      background: rgba(0,201,167,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .task-item.pending-complete .task-title {
+      text-decoration: line-through;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+    .task-item.pending-complete::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--teal);
+      width: 100%;
+      transform-origin: left;
+      animation: countdown-bar var(--anim-duration, 10s) linear var(--anim-delay, 0s) forwards;
+    }
+    @keyframes countdown-bar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
     /* ── TASK ACTION BUTTONS (archive icon on hover) ── */
     .task-actions {
       position: absolute;
@@ -851,6 +875,7 @@
   const WRITE_URL    = 'https://api.github.com/repos/apljacob/brain/contents/tasks.md';
   let _rawMarkdown   = '';
   let _writeTimer    = null;
+  const _pendingComplete = {}; // title → { timer, startedAt }
 
   // ── CLOCK ──
   function updateClock() {
@@ -878,12 +903,29 @@
   }
 
   function toggleTask(title) {
-    const c = getCompleted();
-    setCompleted(title, !c[title]);
-    scheduleWrite();
-    const el = [...document.querySelectorAll('.task-item')].find(e => e.dataset.title === title);
-    if (el) { el.classList.add('completing'); setTimeout(() => renderAll(_lastSections), 250); }
-    else renderAll(_lastSections);
+    // If already pending archive, cancel it on second click
+    if (_pendingComplete[title]) {
+      clearTimeout(_pendingComplete[title].timer);
+      delete _pendingComplete[title];
+      renderAll(_lastSections);
+      return;
+    }
+    // Start 10-second countdown, then auto-archive
+    const startedAt = Date.now();
+    const timer = setTimeout(() => {
+      delete _pendingComplete[title];
+      // Find this task's meta from current sections
+      let meta = '';
+      const sections = _lastSections || {};
+      for (const col of Object.values(sections)) {
+        if (!Array.isArray(col)) continue;
+        const found = col.find(t => t.title === title);
+        if (found) { meta = found.meta || ''; break; }
+      }
+      archiveTask(encodeURIComponent(title), encodeURIComponent(meta), null);
+    }, 10000);
+    _pendingComplete[title] = { timer, startedAt };
+    renderAll(_lastSections);
   }
 
   // ── COLUMN OVERRIDES (drag-to-move, persisted) ──
@@ -1139,14 +1181,23 @@
       }
 
       el.innerHTML = tasks.map(t => {
-        const isDone    = t.done || !!completed[t.title];
-        const titleEnc  = encodeURIComponent(t.title);
-        const metaEnc   = encodeURIComponent(t.meta || '');
+        const isDone     = t.done || !!completed[t.title];
+        const isPending  = !!_pendingComplete[t.title];
+        const titleEnc   = encodeURIComponent(t.title);
+        const metaEnc    = encodeURIComponent(t.meta || '');
+        // For pending items, compute remaining time so animation survives re-renders
+        let pendingStyle = '';
+        if (isPending) {
+          const elapsed   = (Date.now() - _pendingComplete[t.title].startedAt) / 1000;
+          const remaining = Math.max(0.1, 10 - elapsed).toFixed(2);
+          pendingStyle    = `style="--anim-duration:${remaining}s"`;
+        }
+        const extraClass = isDone ? ' done' : isPending ? ' pending-complete' : '';
         return `
-          <div class="task-item${isDone ? ' done' : ''}"
+          <div class="task-item${extraClass}" ${pendingStyle}
                data-title="${escAttr(t.title)}"
                onclick="handleTaskClick(event, '${titleEnc}')">
-            <div class="task-title">${isDone ? '✓ ' : ''}${escHtml(t.title)}</div>
+            <div class="task-title">${isPending ? '⏳ ' : isDone ? '✓ ' : ''}${escHtml(t.title)}</div>
             ${t.meta ? `<div class="task-meta">${escHtml(t.meta)}</div>` : ''}
             <div class="task-actions">
               <button class="task-action-btn"
@@ -1156,7 +1207,7 @@
           </div>`;
       }).join('');
 
-      const openCount = tasks.filter(t => !t.done && !completed[t.title]).length;
+      const openCount = tasks.filter(t => !t.done && !completed[t.title] && !_pendingComplete[t.title]).length;
       document.getElementById(`count-${col}`).textContent = openCount;
     });
 
