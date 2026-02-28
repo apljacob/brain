@@ -1,6 +1,6 @@
 # tasks
 
-*Last updated: February 28, 2026*
+*Last updated: February 27, 2026*
 
 ---
 
@@ -9,29 +9,29 @@
 - [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob completing signup
 - [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
 - [ ] **Brain system cleanup complete** - identity hardened, planning system added, dashboard updated, GitHub synced
+- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
+- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
+- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
 ## waiting on
 
-- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com)
-- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 20 sticker prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
-- [ ] **Background removal** — waiting on: DALL-E renders; use remove.bg or Canva for each design
-- [ ] **Upload designs to Redbubble** — waiting on: account live + renders clean; listing copy ready in listing_copy.md
+- [ ] **Redbubble account live** - — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com)
+- [ ] **DALL-E renders complete** - — waiting on: Jacob to run all 20 sticker prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
+- [ ] **Background removal** - — waiting on: DALL-E renders; use remove.bg or Canva for each design
+- [x] **Upload designs to Redbubble** - — waiting on: account live + renders clean; listing copy ready in listing_copy.md
+- [ ] **Set up Etsy seller account** - ready to execute after Redbubble is live
+- [ ] **Run Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, competitor analysis for Cozy Gaming + Y2K Retro Tech
+- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
+- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
+- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned; existing network
 
 ---
 
 ## someday
 
-- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
-- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
-- [ ] **Set up Etsy seller account** - ready to execute after Redbubble is live
-- [ ] **Run Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, competitor analysis for Cozy Gaming + Y2K Retro Tech
-- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
-- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
-- [ ] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
-- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned; existing network
-- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
+- [x] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
 
 ---
 
