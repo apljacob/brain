@@ -1,17 +1,22 @@
 # tasks
 
-*Last updated: February 28, 2026*
+*Last updated: March 1, 2026*
 
 ---
 
 ## active
 
-- [ ] **Brain system cleanup complete** - identity hardened, planning system added, dashboard updated, GitHub synced
+- [ ] **Upload Batch 4 + 5 designs to Redbubble** - 69 prompts written (designs 1–69); 18 currently live — run remaining through ChatGPT, remove BG, upload
+- [ ] **Generate banner + logo in ChatGPT** - prompts written this session; run DALL-E, overlay text in Canva (2400×600 banner, 180×180 logo), upload to Redbubble
+- [ ] **Add artist bio to Redbubble** - profile currently has no written bio; 3 options drafted this session — pick one and paste in
+- [ ] **Add niche collections to Redbubble** - currently 1 collection (Best Sellers); add Cozy Gaming, Gaming Humor, Y2K Retro Tech as buyer browse paths
 
 ---
 
 ## waiting on
 
+- [ ] **Batch 4–5 renders** — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
+- [ ] **Banner + logo render** — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
 
 ---
 
@@ -24,16 +29,21 @@
 - [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
 - [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
 - [ ] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
-- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned; existing network
 - [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
 ## done
 
-- [x] ~~Redbubble account live — SavePointDesigns, 14 designs uploaded~~ (2026-03-01)
+- [x] ~~Batch 4 — 12 deep IP reference designs (55–66) written + listing copy done~~ (2026-03-01)
+- [x] ~~Batch 5 — Capybara series (67–69) written + listing copy done~~ (2026-03-01)
+- [x] ~~design_prompts_master.md converted to Word doc (design_prompts_master.docx)~~ (2026-03-01)
+- [x] ~~income_log.md deleted brain-wide — reinstall when ready~~ (2026-03-01)
+- [x] ~~Redbubble shop audit — 18 designs live, banner/bio/collections flagged~~ (2026-03-01)
+- [x] ~~SPD logo (pfplogo.png) added to dashboard header — pushed to GitHub~~ (2026-03-01)
+- [x] ~~DALL-E prompts written for Redbubble banner (2400×600) and logo (180×180)~~ (2026-03-01)
+- [x] ~~Redbubble account live — SavePointDesigns, 18 designs uploaded~~ (2026-03-01)
 - [x] ~~First batch of sticker designs generated and uploaded via ChatGPT/DALL-E~~ (2026-03-01)
-
 - [x] ~~Create brain.md~~ (2026-02-23)
 - [x] ~~Absorb resume and update profile~~ (2026-02-23)
 - [x] ~~Separate brain from ventures~~ (2026-02-23)
