@@ -646,9 +646,118 @@
     /* ── PAT INPUT ── */
     #patInput:focus { border-color: var(--teal); outline: none; }
     #patInput::placeholder { color: var(--subtle); }
+
+    /* ══ QOL ENHANCEMENTS ══ */
+
+    /* Progress bar shimmer */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    .progress-fill {
+      background: linear-gradient(90deg,
+        var(--orange-dim) 0%,
+        var(--orange) 30%,
+        #ffcc88 50%,
+        var(--orange) 70%,
+        var(--orange-dim) 100%);
+      background-size: 200% auto;
+      animation: shimmer 2.8s linear infinite;
+    }
+
+    /* Active pill pulse glow */
+    @keyframes pill-glow {
+      0%, 100% { box-shadow: 0 0 4px rgba(0,201,167,0.3); }
+      50%       { box-shadow: 0 0 12px rgba(0,201,167,0.7), 0 0 24px rgba(0,201,167,0.25); }
+    }
+    .pill.active { animation: pill-glow 2.5s ease-in-out infinite; }
+
+    /* Primary venture card glow */
+    @keyframes card-glow {
+      0%, 100% { box-shadow: 0 0 0px transparent; }
+      50%       { box-shadow: 0 0 18px rgba(242,100,25,0.25), inset 0 0 10px rgba(242,100,25,0.04); }
+    }
+    .venture-card.primary { animation: card-glow 3s ease-in-out infinite; }
+
+    /* Header gradient scan-line */
+    header {
+      background: linear-gradient(90deg, #0f0f1a 0%, #13131e 40%, #0f1622 70%, #0f0f1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(242,100,25,0.04) 50%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Pulsing live sync dot */
+    @keyframes dot-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.35; }
+    }
+    .sync-live-dot { display: inline-block; animation: dot-pulse 1.8s ease-in-out infinite; }
+
+    /* Sprint group headers in kanban */
+    .sprint-group-header {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: rgba(242,100,25,0.07);
+      border: 1px solid rgba(242,100,25,0.2);
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin: 8px 0 5px;
+    }
+    .sprint-group-header:first-child { margin-top: 0; }
+
+    /* Sprint day pill */
+    .pill.sprint-day {
+      border-color: rgba(242,100,25,0.4);
+      color: var(--orange);
+      font-size: 10px;
+      background: rgba(242,100,25,0.06);
+      animation: none;
+    }
+
+    /* Completion toast */
+    #completion-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: #1a2a20;
+      border: 1px solid var(--teal);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--teal);
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+      opacity: 0;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    #completion-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Refresh button spin on click */
+    @keyframes spin-once {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    #refreshBtn.spinning { animation: spin-once 0.5s ease; }
   </style>
 </head>
 <body>
+<div id="completion-toast"></div>
 
 <!-- ══════════ ARCHIVE OVERLAY ══════════ -->
 <div class="archive-overlay" id="archiveOverlay" onclick="handleArchiveOverlayClick(event)">
@@ -706,11 +815,12 @@
 
 <!-- ══════════════════════════════════════ HEADER ══════════════════════════════════════ -->
 <header>
-  <div class="brand"><img src="Folders/Save Point Designs/branding/pfplogo.png" alt="Save Point Designs Logo">BRAIN <span>// Jacob Cassar</span></div>
+  <div class="brand"><img src="https://raw.githubusercontent.com/apljacob/brain/main/Folders/Save%20Point%20Designs/branding/pfplogo.png" alt="Save Point Designs Logo">BRAIN <span>// Jacob Cassar</span></div>
 
   <div class="header-center">
-    <div class="pill active">🔥 Sticker Shop — Active</div>
+    <div class="pill active">🔥 Traction Sprint — Active</div>
     <div class="pill active">🎨 Save Point Designs</div>
+    <div class="pill sprint-day" id="sprint-day-pill">📅 Day —</div>
     <div class="pill">📍 Los Angeles, PST</div>
   </div>
 
@@ -721,7 +831,9 @@
     <button class="archive-header-btn" onclick="openArchive()">
       📦 Archive <span class="archive-badge" id="archiveBadge">0</span>
     </button>
+    <button class="archive-header-btn" id="refreshBtn" onclick="manualRefresh()" title="Force re-fetch tasks from GitHub">↻ Refresh</button>
     <span id="sync-status" title="Task data source"></span>
+    <span id="last-synced" style="font-size:11px;color:var(--muted);white-space:nowrap;"></span>
     <div id="clock">––</div>
   </div>
 </header>
@@ -826,10 +938,10 @@
         <div class="vc-name">🎮 Save Point Designs</div>
         <div class="vc-score">23/25</div>
       </div>
-      <div class="vc-status">🔥 Active — Niches locked · Generating designs</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:35%"></div></div>
+      <div class="vc-status">🔥 Active — 18 designs live · Traction sprint</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
       <div class="vc-metrics">
-        <div class="vc-metric">Phase: <span>2 — First 20 Designs</span></div>
+        <div class="vc-metric">Phase: <span>Traction Sprint</span></div>
         <div class="vc-metric">Platform: <span>Redbubble → Etsy</span></div>
         <div class="vc-metric">Cost: <span>$0–$165 launch</span></div>
       </div>
@@ -853,22 +965,22 @@
     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:10px 12px;">
       <div class="risk-row">
         <div class="risk-dot high"></div>
-        <div class="risk-label">Designs not uploaded yet</div>
+        <div class="risk-label">Shop invisible — no external traffic yet</div>
         <div class="risk-level">HIGH</div>
       </div>
       <div class="risk-row">
         <div class="risk-dot high"></div>
-        <div class="risk-label">Google algo kills site value</div>
+        <div class="risk-label">Etsy not launched — missing highest-margin channel</div>
         <div class="risk-level">HIGH</div>
       </div>
       <div class="risk-row">
         <div class="risk-dot medium"></div>
-        <div class="risk-label">School crunch kills momentum</div>
+        <div class="risk-label">Banner + bio missing — shop looks unfinished</div>
         <div class="risk-level">MED</div>
       </div>
       <div class="risk-row">
         <div class="risk-dot medium"></div>
-        <div class="risk-label">Overpaying on first site deal</div>
+        <div class="risk-label">School crunch kills sprint momentum</div>
         <div class="risk-level">MED</div>
       </div>
     </div>
@@ -934,6 +1046,7 @@
         if (found) { meta = found.meta || ''; break; }
       }
       archiveTask(encodeURIComponent(title), encodeURIComponent(meta), null);
+      showToast(`✓ Task done — ${title.length > 40 ? title.slice(0,40) + '…' : title}`);
     }, 10000);
     _pendingComplete[title] = { timer, startedAt };
     renderAll(_lastSections);
@@ -1152,19 +1265,24 @@
   function parseTasks(raw) {
     const sections = { active: [], waiting: [], someday: [], done: [] };
     let cur = null;
+    let curGroup = null;
     raw.split('\n').forEach(line => {
       const l = line.trim();
-      if (/^## active/i.test(l))   { cur = 'active';  return; }
-      if (/^## waiting/i.test(l))  { cur = 'waiting'; return; }
-      if (/^## someday/i.test(l))  { cur = 'someday'; return; }
-      if (/^## done/i.test(l))     { cur = 'done';    return; }
+      if (/^## active/i.test(l))   { cur = 'active';  curGroup = null; return; }
+      if (/^## waiting/i.test(l))  { cur = 'waiting'; curGroup = null; return; }
+      if (/^## someday/i.test(l))  { cur = 'someday'; curGroup = null; return; }
+      if (/^## done/i.test(l))     { cur = 'done';    curGroup = null; return; }
       if (!cur) return;
+      // Sprint group headers (### Sprint Priority N — ...)
+      const gm = l.match(/^###\s+(.+)$/);
+      if (gm) { curGroup = gm[1].replace(/^Sprint Priority \d+\s*[—-]\s*/, ''); return; }
       const m = l.match(/^-\s+\[([ x])\]\s+\*\*(.*?)\*\*\s*[-–]?\s*(.*)?$/);
       if (m) {
         sections[cur].push({
           done:  m[1] === 'x',
           title: m[2],
-          meta:  (m[3] || '').replace(/~~(.*?)~~/g, '$1').trim()
+          meta:  (m[3] || '').replace(/~~(.*?)~~/g, '$1').trim(),
+          group: curGroup || null
         });
       }
     });
@@ -1191,12 +1309,18 @@
         return;
       }
 
-      el.innerHTML = tasks.map(t => {
+      // Build HTML with optional sprint group headers
+      const chunks = [];
+      let lastGroup = null;
+      tasks.forEach(t => {
+        if (col === 'active' && t.group && t.group !== lastGroup) {
+          chunks.push(`<div class="sprint-group-header">${escHtml(t.group)}</div>`);
+          lastGroup = t.group;
+        }
         const isDone     = t.done || !!completed[t.title];
         const isPending  = !!_pendingComplete[t.title];
         const titleEnc   = encodeURIComponent(t.title);
         const metaEnc    = encodeURIComponent(t.meta || '');
-        // For pending items, compute remaining time so animation survives re-renders
         let pendingStyle = '';
         if (isPending) {
           const elapsed   = (Date.now() - _pendingComplete[t.title].startedAt) / 1000;
@@ -1204,7 +1328,7 @@
           pendingStyle    = `style="--anim-duration:${remaining}s"`;
         }
         const extraClass = isDone ? ' done' : isPending ? ' pending-complete' : '';
-        return `
+        chunks.push(`
           <div class="task-item${extraClass}" ${pendingStyle}
                data-title="${escAttr(t.title)}"
                onclick="handleTaskClick(event, '${titleEnc}')">
@@ -1215,12 +1339,17 @@
                       title="Archive task"
                       onclick="archiveTask('${titleEnc}','${metaEnc}',event)">📦</button>
             </div>
-          </div>`;
-      }).join('');
+          </div>`);
+      });
+      el.innerHTML = chunks.join('');
 
       const openCount = tasks.filter(t => !t.done && !completed[t.title] && !_pendingComplete[t.title]).length;
       document.getElementById(`count-${col}`).textContent = openCount;
     });
+
+    // Update tab title with active count
+    const activeOpen = (finalSections.active || []).filter(t => !t.done && !completed[t.title] && !_pendingComplete[t.title]).length;
+    document.title = activeOpen > 0 ? `BRAIN (${activeOpen}) — Jacob Cassar` : 'BRAIN — Jacob Cassar';
 
     updateArchiveBadge();
     initSortable();
@@ -1435,12 +1564,17 @@
     }
 
     if (source === 'live') {
-      syncEl.innerHTML = '● <span style="color:var(--teal)">live from GitHub</span>';
+      syncEl.innerHTML = '<span class="sync-live-dot" style="color:var(--teal)">●</span> <span style="color:var(--teal)">live from GitHub</span>';
     } else if (TASKS_URL) {
       syncEl.innerHTML = '● <span style="color:var(--orange)">offline — showing cached</span>';
     } else {
       syncEl.innerHTML = '● <span style="color:var(--muted)">embedded data</span>';
     }
+
+    _lastLoadTime = Date.now();
+    const lastSyncedEl = document.getElementById('last-synced');
+    if (lastSyncedEl) lastSyncedEl.textContent = 'synced just now';
+    startLastSyncedTicker();
 
     renderAll(parseTasks(raw));
   }
@@ -1460,81 +1594,138 @@
   }
 
   // ── EMBEDDED TASK DATA (fallback) ──
-  // Last synced: 2026-02-28
+  // Last synced: 2026-03-02
   const TASKS_MD = `
 # tasks
 
-*Last updated: February 28, 2026*
+*Last updated: March 2, 2026 — reprioritized for traction sprint*
 
 ---
 
 ## active
 
-- [ ] **Set up Redbubble account** - store name: Save Point Designs, username: SavePointDesigns, credentials in private.md — Jacob completing signup
-- [ ] **Generate production-quality designs via ChatGPT/DALL-E** - 20 prompts ready in Save Point Designs/chatgpt_prompts.md; run through DALL-E, remove backgrounds, upload to Redbubble
-- [ ] **Brain system cleanup complete** - identity hardened, planning system added, dashboard updated, GitHub synced
+### Sprint Priority 1 — Complete Shop Profile (Today)
+- [ ] **Render banner + logo via ChatGPT** — prompts in design_prompts_master.md; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
+- [ ] **Upload banner + logo to Redbubble** — after render
+- [ ] **Add artist bio to Redbubble** — 3 options already drafted; pick one and paste in
+- [ ] **Add niche collections to Redbubble** — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
+
+### Sprint Priority 2 — Launch Etsy Digital Packs (This Week)
+- [ ] **Set up Etsy seller account** — now a priority, not someday; Etsy digital packs are the fastest path to first revenue (95–100% margin)
+- [ ] **Create + list Cozy Gaming digital pack** — bundle top 5 Cozy Gaming designs as PNG download; list at $4–$5 using existing listing copy
+- [ ] **Create + list Y2K Retro Tech digital pack** — same approach; second listing
+- [ ] **Run Etsy/eRank niche deep-dive** — Claude pulls validated search terms for Etsy listing tags
+
+### Sprint Priority 3 — Pinterest External Traffic (Days 3–5)
+- [ ] **Create Pinterest Business account for Save Point Designs**
+- [ ] **Set up 3 boards:** Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
+- [ ] **Pin all 18 live Redbubble designs** — use direct product URLs; add sticker image + text overlay
+
+### Sprint Priority 4 — Render + Upload Batches 4–5 (Week 2)
+- [ ] **Upload Batch 4 + 5 designs to Redbubble** — 69 prompts written; run designs 55–69 through ChatGPT, remove BG, upload with existing listing copy
+
+### Sprint Priority 5 — SEO Verification (Week 2)
+- [ ] **Verify Redbubble tags** — cross-check top 10 design tags against Redbubble autocomplete; replace low-volume terms
 
 ---
 
 ## waiting on
 
-- [ ] **Redbubble account live** — waiting on: Jacob to complete signup (SavePointDesigns / jcassar2004@hotmail.com)
-- [ ] **DALL-E renders complete** — waiting on: Jacob to run all 20 sticker prompts through ChatGPT using ChatGPT_Handoff_SavePointDesigns.pdf
-- [ ] **Background removal** — waiting on: DALL-E renders; use remove.bg or Canva for each design
-- [ ] **Upload designs to Redbubble** — waiting on: account live + renders clean; listing copy ready in listing_copy.md
+- [ ] **Batch 4–5 renders** — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
+- [ ] **Banner + logo render** — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
 
 ---
 
 ## someday
 
+- [ ] **Set up Printify + connect to Etsy** — after Etsy account is live and digital packs are validated
+- [ ] **Add shop to Society6 + TeePublic** — expansion after Redbubble + Etsy are producing
 - [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
 - [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
-- [ ] **Set up Etsy seller account** - ready to execute after Redbubble is live
-- [ ] **Run Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, competitor analysis for Cozy Gaming + Y2K Retro Tech
-- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
-- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
-- [ ] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
-- [ ] **Answer open profile questions** - school schedule / sprint windows; gear owned; existing network
 - [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
 ## done
 
-- [x] ~~Create brain.md~~ (2026-02-23)
-- [x] ~~Absorb resume and update profile~~ (2026-02-23)
-- [x] ~~Separate brain from ventures~~ (2026-02-23)
-- [x] ~~Scrub Apple references from ventures~~ (2026-02-23)
-- [x] ~~Add PST timestamps to all files~~ (2026-02-23)
-- [x] ~~Revitalize all .md files with plugin structures~~ (2026-02-23)
-- [x] ~~Consolidate 12 files → 6 files~~ (2026-02-24)
-- [x] ~~Delete memory/ directory — all content absorbed into core files~~ (2026-02-24)
-- [x] ~~Build session init + closeout protocols~~ (2026-02-24)
-- [x] ~~Add financial accounts to private.md~~ (2026-02-24)
-- [x] ~~Full Opus-level brain system audit — 8 issues found and fixed~~ (2026-02-25)
-- [x] ~~Sticker ecommerce market research — appended to ventures.md~~ (2026-02-25)
-- [x] ~~task-observer initialized — skill-observations/ directory live~~ (2026-02-25)
-- [x] ~~CLAUDE.md created — dual-layer session activation~~ (2026-02-25)
-- [x] ~~Deploy dashboard.html to GitHub Pages~~ (2026-02-26)
-- [x] ~~Add drag-and-drop + archive module to dashboard~~ (2026-02-26)
-- [x] ~~Remove AES-256 encryption from private.md~~ (2026-02-27)
-- [x] ~~Store: anonymous for now — rebrand when traction confirmed~~ (2026-02-27)
-- [x] ~~Niches locked — Cozy Gaming (primary) + Y2K Retro Tech (secondary)~~ (2026-02-27)
-- [x] ~~Digital packs first confirmed~~ (2026-02-27)
-- [x] ~~Store name: Save Point Designs — username confirmed on Redbubble~~ (2026-02-27)
-- [x] ~~Web credentials stored in private.md~~ (2026-02-27)
-- [x] ~~20 sticker concepts complete — 8 Cozy Gaming, 6 Y2K, 6 Crossover~~ (2026-02-27)
-- [x] ~~Listing copy + SEO tags written for all 20 designs~~ (2026-02-27)
-- [x] ~~DALL-E prompts created for all 20 designs + branding~~ (2026-02-27)
-- [x] ~~Dashboard code audit — 5 bugs fixed, 2 enhancements~~ (2026-02-27)
+- [x] ~~Batch 4 — 12 deep IP reference designs (55–66) written + listing copy done~~ (2026-03-01)
+- [x] ~~Batch 5 — Capybara series (67–69) written + listing copy done~~ (2026-03-01)
+- [x] ~~design_prompts_master.md converted to Word doc~~ (2026-03-01)
+- [x] ~~income_log.md deleted brain-wide — reinstall when ready~~ (2026-03-01)
+- [x] ~~Redbubble shop audit — 18 designs live, banner/bio/collections flagged~~ (2026-03-01)
+- [x] ~~SPD logo (pfplogo.png) added to dashboard header — pushed to GitHub~~ (2026-03-01)
+- [x] ~~DALL-E prompts written for Redbubble banner (2400×600) and logo (180×180)~~ (2026-03-01)
+- [x] ~~Redbubble account live — SavePointDesigns, 18 designs uploaded~~ (2026-03-01)
+- [x] ~~First batch of sticker designs generated and uploaded via ChatGPT/DALL-E~~ (2026-03-01)
 - [x] ~~Two-way GitHub sync built into dashboard~~ (2026-02-27)
+- [x] ~~Dashboard code audit — 5 bugs fixed, 2 enhancements~~ (2026-02-27)
 - [x] ~~Digital rental properties research — full report in ventures.md (20/25)~~ (2026-02-28)
 - [x] ~~Brain identity hardened — partner voice, planning system, file map coded in~~ (2026-02-28)
+- [x] ~~Create brain.md~~ (2026-02-23)
+- [x] ~~Deploy dashboard.html to GitHub Pages~~ (2026-02-26)
 
 `;
 
+  // ── SPRINT DAY COUNTER ──
+  (function() {
+    const sprintStart = new Date('2026-03-02T00:00:00-08:00');
+    const el = document.getElementById('sprint-day-pill');
+    if (!el) return;
+    const day = Math.max(1, Math.floor((Date.now() - sprintStart.getTime()) / 86400000) + 1);
+    el.textContent = `📅 Sprint Day ${day}`;
+  })();
+
+  // ── COMPLETION TOAST ──
+  let _toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById('completion-toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // ── AUTO-POLL (every 5 minutes) ──
+  let _lastLoadTime = null;
+  let _lastSyncedInterval = null;
+
+  function startLastSyncedTicker() {
+    if (_lastSyncedInterval) clearInterval(_lastSyncedInterval);
+    _lastSyncedInterval = setInterval(() => {
+      if (!_lastLoadTime) return;
+      const el = document.getElementById('last-synced');
+      if (!el) return;
+      const mins = Math.floor((Date.now() - _lastLoadTime) / 60000);
+      el.textContent = mins < 1 ? 'synced just now' : `synced ${mins} min ago`;
+    }, 30000);
+  }
+
+  function manualRefresh() {
+    const btn = document.getElementById('refreshBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('spinning');
+      setTimeout(() => btn.classList.remove('spinning'), 520);
+    }
+    loadTasks().finally(() => {
+      if (btn) { btn.disabled = false; }
+    });
+  }
+
+  setInterval(() => loadTasks(), 5 * 60 * 1000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') loadTasks();
+  });
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeArchive(); closeSettings(); }
+    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      const active = document.activeElement;
+      if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+      manualRefresh();
+    }
   });
 
   updateSyncBadge();
