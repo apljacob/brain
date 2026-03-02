@@ -1,15 +1,33 @@
 # tasks
 
-*Last updated: March 1, 2026*
+*Last updated: March 2, 2026 — reprioritized for traction sprint (see planning/traction-analysis-2026-03-02.md)*
 
 ---
 
 ## active
 
-- [ ] **Upload Batch 4 + 5 designs to Redbubble** - 69 prompts written (designs 1–69); 18 currently live — run remaining through ChatGPT, remove BG, upload
-- [ ] **Generate banner + logo in ChatGPT** - prompts written this session; run DALL-E, overlay text in Canva (2400×600 banner, 180×180 logo), upload to Redbubble
-- [ ] **Add artist bio to Redbubble** - profile currently has no written bio; 3 options drafted this session — pick one and paste in
-- [ ] **Add niche collections to Redbubble** - currently 1 collection (Best Sellers); add Cozy Gaming, Gaming Humor, Y2K Retro Tech as buyer browse paths
+### Sprint Priority 1 — Complete Shop Profile (Today)
+- [ ] **Render banner + logo via ChatGPT** — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
+- [ ] **Upload banner + logo to Redbubble** — after render
+- [ ] **Add artist bio to Redbubble** — 3 options already drafted; pick one and paste in
+- [ ] **Add niche collections to Redbubble** — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
+
+### Sprint Priority 2 — Launch Etsy Digital Packs (This Week)
+- [ ] **Set up Etsy seller account** — now a priority, not someday; Etsy digital packs are the fastest path to first revenue (95–100% margin)
+- [ ] **Create + list Cozy Gaming digital pack** — bundle top 5 Cozy Gaming designs as PNG download; list at $4–$5 using existing listing copy
+- [ ] **Create + list Y2K Retro Tech digital pack** — same approach; second listing
+- [ ] **Run Etsy/eRank niche deep-dive** — Claude pulls validated search terms for Etsy listing tags
+
+### Sprint Priority 3 — Pinterest External Traffic (Days 3–5)
+- [ ] **Create Pinterest Business account for Save Point Designs**
+- [ ] **Set up 3 boards:** Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
+- [ ] **Pin all 18 live Redbubble designs** — use direct product URLs; add sticker image + text overlay
+
+### Sprint Priority 4 — Render + Upload Batches 4–5 (Week 2)
+- [ ] **Upload Batch 4 + 5 designs to Redbubble** — 69 prompts written; run designs 55–69 through ChatGPT, remove BG, upload with existing listing copy
+
+### Sprint Priority 5 — SEO Verification (Week 2)
+- [ ] **Verify Redbubble tags** — cross-check top 10 design tags against Redbubble autocomplete; replace low-volume terms
 
 ---
 
@@ -22,13 +40,10 @@
 
 ## someday
 
+- [ ] **Set up Printify + connect to Etsy** — after Etsy account is live and digital packs are validated
+- [ ] **Add shop to Society6 + TeePublic** — expansion after Redbubble + Etsy are producing
 - [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
 - [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
-- [ ] **Set up Etsy seller account** - ready to execute after Redbubble is live
-- [ ] **Run Etsy/eRank niche deep-dive** - Claude pulls specific sub-niches, top search terms, competitor analysis for Cozy Gaming + Y2K Retro Tech
-- [ ] **Set up Printify + connect to Etsy** - after Etsy account is live
-- [ ] **Write all Etsy listing copy + SEO tags** - Claude handles; Jacob uploads
-- [ ] **Add shop to Society6 + TeePublic** - expansion after first Redbubble designs are live
 - [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
