@@ -30,12 +30,12 @@
 - [ ] **Batch 4–5 renders** - — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
 - [ ] **Banner + logo render** - — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
 - [ ] **Set up Printify + connect to Etsy** - — after Etsy account is live and digital packs are validated
-- [ ] **Add shop to Society6 + TeePublic** - — expansion after Redbubble + Etsy are producing
 
 ---
 
 ## someday
 
+- [ ] **Add shop to Society6 + TeePublic** - — expansion after Redbubble + Etsy are producing
 
 ---
 
