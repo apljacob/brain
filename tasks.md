@@ -1,41 +1,50 @@
 # tasks
 
-*Last updated: March 2, 2026*
+*Last updated: March 2, 2026 — reprioritized for traction sprint (see planning/traction-analysis-2026-03-02.md)*
 
 ---
 
 ## active
 
-- [ ] **Render banner + logo via ChatGPT** - — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
-- [ ] **Upload banner + logo to Redbubble** - — after render
-- [ ] **Add artist bio to Redbubble** - — 3 options already drafted; pick one and paste in
-- [ ] **Add niche collections to Redbubble** - — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
-- [ ] **Create + list Cozy Gaming digital pack** - — bundle top 5 Cozy Gaming designs as PNG download; list at $4–$5 using existing listing copy
-- [ ] **Create + list Y2K Retro Tech digital pack** - — same approach; second listing
+### Sprint Priority 1 — Complete Shop Profile (Today)
+- [ ] **Render banner + logo via ChatGPT** — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
+- [ ] **Upload banner + logo to Redbubble** — after render
+- [ ] **Add artist bio to Redbubble** — 3 options already drafted; pick one and paste in
+- [ ] **Add niche collections to Redbubble** — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
+
+### Sprint Priority 2 — Launch Etsy Digital Packs (This Week)
+- [ ] **Set up Etsy seller account** — now a priority, not someday; Etsy digital packs are the fastest path to first revenue (95–100% margin)
+- [ ] **Create + list Cozy Gaming digital pack** — bundle top 5 Cozy Gaming designs as PNG download; list at $4–$5 using existing listing copy
+- [ ] **Create + list Y2K Retro Tech digital pack** — same approach; second listing
+- [ ] **Run Etsy/eRank niche deep-dive** — Claude pulls validated search terms for Etsy listing tags
+
+### Sprint Priority 3 — Pinterest External Traffic (Days 3–5)
 - [ ] **Create Pinterest Business account for Save Point Designs**
-- [ ] **Set up 3 boards:** - Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
-- [ ] **Pin all 18 live Redbubble designs** - — use direct product URLs; add sticker image + text overlay
-- [ ] **Upload Batch 4 + 5 designs to Redbubble** - — 69 prompts written; run designs 55–69 through ChatGPT, remove BG, upload with existing listing copy
-- [ ] **Verify Redbubble tags** - — cross-check top 10 design tags against Redbubble autocomplete; replace low-volume terms
-- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
-- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
-- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
+- [ ] **Set up 3 boards:** Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
+- [ ] **Pin all 18 live Redbubble designs** — use direct product URLs; add sticker image + text overlay
+
+### Sprint Priority 4 — Render + Upload Batches 4–5 (Week 2)
+- [ ] **Upload Batch 4 + 5 designs to Redbubble** — 69 prompts written; run designs 55–69 through ChatGPT, remove BG, upload with existing listing copy
+
+### Sprint Priority 5 — SEO Verification (Week 2)
+- [ ] **Verify Redbubble tags** — cross-check top 10 design tags against Redbubble autocomplete; replace low-volume terms
 
 ---
 
 ## waiting on
 
-- [ ] **Set up Etsy seller account** - — now a priority, not someday; Etsy digital packs are the fastest path to first revenue (95–100% margin)
-- [ ] **Run Etsy/eRank niche deep-dive** - — Claude pulls validated search terms for Etsy listing tags
-- [ ] **Batch 4–5 renders** - — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
-- [ ] **Banner + logo render** - — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
-- [ ] **Set up Printify + connect to Etsy** - — after Etsy account is live and digital packs are validated
+- [ ] **Batch 4–5 renders** — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
+- [ ] **Banner + logo render** — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
 
 ---
 
 ## someday
 
-- [ ] **Add shop to Society6 + TeePublic** - — expansion after Redbubble + Etsy are producing
+- [ ] **Set up Printify + connect to Etsy** — after Etsy account is live and digital packs are validated
+- [ ] **Add shop to Society6 + TeePublic** — expansion after Redbubble + Etsy are producing
+- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
+- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
+- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
