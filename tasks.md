@@ -1,41 +1,61 @@
 # tasks
 
-*Last updated: March 2, 2026*
+*Last updated: March 2, 2026 — Pipeline expanded. SPD on autopilot. New sprint: Notion templates + finance spreadsheets.*
 
 ---
 
 ## active
 
-- [ ] **Render banner + logo via ChatGPT** - — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
-- [ ] **Upload banner + logo to Redbubble** - — after render
-- [ ] **Add artist bio to Redbubble** - — 3 options already drafted; pick one and paste in
-- [ ] **Add niche collections to Redbubble** - — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
-- [ ] **Create + list Cozy Gaming digital pack** - — bundle top 5 Cozy Gaming designs as PNG download; list at $4–$5 using existing listing copy
-- [ ] **Create + list Y2K Retro Tech digital pack** - — same approach; second listing
-- [ ] **Create Pinterest Business account for Save Point Designs**
-- [ ] **Set up 3 boards:** - Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
-- [ ] **Pin all 18 live Redbubble designs** - — use direct product URLs; add sticker image + text overlay
-- [ ] **Upload Batch 4 + 5 designs to Redbubble** - — 69 prompts written; run designs 55–69 through ChatGPT, remove BG, upload with existing listing copy
-- [ ] **Verify Redbubble tags** - — cross-check top 10 design tags against Redbubble autocomplete; replace low-volume terms
-- [ ] **Browse Flippa + Motion Invest** - create free accounts, study listings for 2 weeks, learn valuation before spending anything
-- [ ] **Buy first starter site ($200–$500)** - learning vehicle only; accept it might lose money — it's tuition
-- [ ] **Set up week planning routine** - dump schedule into brain, Claude organizes; Sunday weekly review 30 min
+### Sprint 1 — Gaming Notion Templates (Start This Week)
+- [ ] **Research top 5 gaming Notion templates** — search Gumroad + Notion marketplace; note pricing, structure, design quality, gaps
+- [ ] **Build MVP: Cozy Game Backlog Tracker** — Notion template; fields: game title, platform, status, play time, rating, notes
+- [ ] **Set up Gumroad seller account** — free; payout method; upload first product
+- [ ] **Create first Gumroad listing** — product page, thumbnail, description, pricing ($15–$20 for MVP)
+- [ ] **Build 4 more templates over 4 weeks** — Achievement Journal, Game Night Organizer, Cozy Play Mood Log, Wishlist Tracker
+
+### Sprint 2 — Financial Spreadsheet Templates (Run in Parallel)
+- [ ] **Build: "Side Hustler Multi-Income Tracker"** — Google Sheets; income streams, monthly totals, passive vs active breakdown, goal tracker
+- [ ] **Add disclaimer copy to spreadsheet + listing** — "Not financial advice. For personal organization only."
+- [ ] **List on Gumroad** — product page, pricing ($15–$20), thumbnail
+- [ ] **List on Etsy** — digital download listing; tag with: side hustle, income tracker, freelance, gig economy spreadsheet
+- [ ] **Build: "Dividend Portfolio Tracker"** — once Side Hustler template is listed
 
 ---
 
 ## waiting on
 
-- [ ] **Set up Etsy seller account** - — now a priority, not someday; Etsy digital packs are the fastest path to first revenue (95–100% margin)
-- [ ] **Run Etsy/eRank niche deep-dive** - — Claude pulls validated search terms for Etsy listing tags
-- [ ] **Batch 4–5 renders** - — waiting on: Jacob to run prompts 55–69 through ChatGPT and remove backgrounds
-- [ ] **Banner + logo render** - — waiting on: Jacob to run DALL-E prompts, add text overlay in Canva, upload to Redbubble
-- [ ] **Set up Printify + connect to Etsy** - — after Etsy account is live and digital packs are validated
+- [ ] **Batch 4–5 renders** — SPD autopilot; Jacob runs prompts 55–69 through ChatGPT when ready (no rush)
 
 ---
 
 ## someday
 
-- [ ] **Add shop to Society6 + TeePublic** - — expansion after Redbubble + Etsy are producing
+### SPD — Autopilot Queue (keep running, not urgent)
+- [ ] **Render banner + logo via ChatGPT** — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
+- [ ] **Upload banner + logo to Redbubble** — after render
+- [ ] **Add artist bio to Redbubble** — 3 options already drafted; pick one and paste in
+- [ ] **Add niche collections to Redbubble** — create: Cozy Gaming, Y2K Retro Tech, Gaming Humor; move existing 18 designs into correct collections
+- [ ] **Set up Etsy seller account** — when ready to layer in Etsy digital packs
+- [ ] **Create + list Cozy Gaming digital pack** — bundle top 5 Cozy Gaming designs as PNG download
+- [ ] **Create + list Y2K Retro Tech digital pack** — same approach
+- [ ] **Create Pinterest Business account for Save Point Designs**
+- [ ] **Set up 3 boards:** Cozy Gaming Stickers | Y2K Aesthetic Stickers | Laptop Sticker Ideas
+- [ ] **Upload Batch 4 + 5 designs to Redbubble** — 69 prompts written; run designs 55–69 through ChatGPT when ready
+- [ ] **Verify Redbubble tags** — cross-check top 10 design tags against Redbubble autocomplete
+- [ ] **Set up Printify + connect to Etsy** — after Etsy account is live and digital packs are validated
+- [ ] **Add shop to Society6 + TeePublic** — expansion after Redbubble + Etsy are producing
+
+### New Ventures — Queue (pending validation gates)
+- [ ] **Browse Flippa + Motion Invest** — create free accounts, study listings, learn valuation before spending
+- [ ] **Buy first starter site ($200–$500)** — learning vehicle; accept it might lose money
+- [ ] **Build Gamified Backlog Tracker (SaaS)** — only if Gaming Notion Templates sell at scale
+- [ ] **Build Dividend Portfolio Tracker (SaaS)** — only if Financial Spreadsheet Templates sell at scale
+- [ ] **Build Gaming Music Packs** — Weeks 3–6; use Soundraw/Udio; start with Cozy Ambient pack
+- [ ] **Build Stream Overlay + Music Bundle** — Weeks 3–6; repurpose SPD assets; Cozy Gaming bundle first
+- [ ] **Explore iOS/gaming app concept** — no-code (Bubble/Lovable); keep thinking; no action yet
+
+### General
+- [ ] **Set up week planning routine** — dump schedule into brain, Claude organizes; Sunday weekly review 30 min
 
 ---
 
