@@ -1,19 +1,19 @@
 # tasks
 
-*Last updated: March 2, 2026 — Pipeline expanded. SPD on autopilot. New sprint: Notion templates + finance spreadsheets.*
+*Last updated: March 4, 2026 — Pipeline expanded. SPD on autopilot. Next up: Notion templates + finance spreadsheets.*
 
 ---
 
 ## active
 
-### Sprint 1 — Gaming Notion Templates (Start This Week)
+### Gaming Notion Templates
 - [ ] **Research top 5 gaming Notion templates** — search Gumroad + Notion marketplace; note pricing, structure, design quality, gaps
 - [ ] **Build MVP: Cozy Game Backlog Tracker** — Notion template; fields: game title, platform, status, play time, rating, notes
 - [ ] **Set up Gumroad seller account** — free; payout method; upload first product
 - [ ] **Create first Gumroad listing** — product page, thumbnail, description, pricing ($15–$20 for MVP)
 - [ ] **Build 4 more templates over 4 weeks** — Achievement Journal, Game Night Organizer, Cozy Play Mood Log, Wishlist Tracker
 
-### Sprint 2 — Financial Spreadsheet Templates (Run in Parallel)
+### Financial Spreadsheet Templates
 - [ ] **Build: "Side Hustler Multi-Income Tracker"** — Google Sheets; income streams, monthly totals, passive vs active breakdown, goal tracker
 - [ ] **Add disclaimer copy to spreadsheet + listing** — "Not financial advice. For personal organization only."
 - [ ] **List on Gumroad** — product page, pricing ($15–$20), thumbnail
