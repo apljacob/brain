@@ -25,6 +25,7 @@
 ## waiting on
 
 - [ ] **Batch 4–5 renders** — SPD autopilot; Jacob runs prompts 55–69 through ChatGPT when ready (no rush)
+- [ ] **Load NOVA Telegram launchd service** — run `launchctl load ~/Library/LaunchAgents/com.nova.telegram.plist` when ready to make bot auto-boot permanent
 
 ---
 
