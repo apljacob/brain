@@ -1,37 +1,22 @@
 # tasks
 
-*Last updated: March 4, 2026 — Pipeline expanded. SPD on autopilot. Next up: Notion templates + finance spreadsheets.*
+*Last updated: March 13, 2026 — Venture cleanup. 3D Printing promoted to P0 Active Build. 7 ventures archived.*
 
 ---
 
 ## active
 
-### Gaming Notion Templates
-- [ ] **Research top 5 gaming Notion templates** — search Gumroad + Notion marketplace; note pricing, structure, design quality, gaps
-- [ ] **Build MVP: Cozy Game Backlog Tracker** — Notion template; fields: game title, platform, status, play time, rating, notes
-- [ ] **Set up Gumroad seller account** — free; payout method; upload first product
-- [ ] **Create first Gumroad listing** — product page, thumbnail, description, pricing ($15–$20 for MVP)
-- [ ] **Build 4 more templates over 4 weeks** — Achievement Journal, Game Night Organizer, Cozy Play Mood Log, Wishlist Tracker
-
-### Financial Spreadsheet Templates
-- [ ] **Build: "Side Hustler Multi-Income Tracker"** — Google Sheets; income streams, monthly totals, passive vs active breakdown, goal tracker
-- [ ] **Add disclaimer copy to spreadsheet + listing** — "Not financial advice. For personal organization only."
-- [ ] **List on Gumroad** — product page, pricing ($15–$20), thumbnail
-- [ ] **List on Etsy** — digital download listing; tag with: side hustle, income tracker, freelance, gig economy spreadsheet
-- [ ] **Build: "Dividend Portfolio Tracker"** — once Side Hustler template is listed
+### 3D Printing Business (P0 — Active Build)
+- [ ] **Confirm Bambu model** — verify P1S vs any newer model (P2S?); check us.store.bambulab.com for current lineup and pricing
+- [ ] **Decide: P1S Solo vs Combo (AMS)** — AMS recommended for multi-color differentiation; Combo ~$699–$899
+- [ ] **Design first product: Cozy Gaming Desk Bundle** — controller stand + headset mount + cable clip set; multi-color; mushroom/pixel accents; target $35–$55 bundle price
+- [ ] **Open Etsy seller account under Save Point Designs** — or expand existing SPD shop to include 3D printed products
+- [ ] **Source filament** — Bambu brand PLA + Silk PLA for Y2K translucent effect; PETG for functional items
+- [ ] **Set up eRank account** — for Etsy SEO research before first listing goes live
 
 ---
 
-## waiting on
-
-- [ ] **Batch 4–5 renders** — SPD autopilot; Jacob runs prompts 55–69 through ChatGPT when ready (no rush)
-- [ ] **Load NOVA Telegram launchd service** — run `launchctl load ~/Library/LaunchAgents/com.nova.telegram.plist` when ready to make bot auto-boot permanent
-
----
-
-## someday
-
-### SPD — Autopilot Queue (keep running, not urgent)
+## P2 — Low Priority (SPD Autopilot Queue)
 - [ ] **Render banner + logo via ChatGPT** — prompts in `design_prompts_master.md`; run DALL-E, add text overlay in Canva (2400×600 banner, 180×180 logo)
 - [ ] **Upload banner + logo to Redbubble** — after render
 - [ ] **Add artist bio to Redbubble** — 3 options already drafted; pick one and paste in
@@ -46,14 +31,16 @@
 - [ ] **Set up Printify + connect to Etsy** — after Etsy account is live and digital packs are validated
 - [ ] **Add shop to Society6 + TeePublic** — expansion after Redbubble + Etsy are producing
 
-### New Ventures — Queue (pending validation gates)
-- [ ] **Browse Flippa + Motion Invest** — create free accounts, study listings, learn valuation before spending
-- [ ] **Buy first starter site ($200–$500)** — learning vehicle; accept it might lose money
-- [ ] **Build Gamified Backlog Tracker (SaaS)** — only if Gaming Notion Templates sell at scale
-- [ ] **Build Dividend Portfolio Tracker (SaaS)** — only if Financial Spreadsheet Templates sell at scale
-- [ ] **Build Gaming Music Packs** — Weeks 3–6; use Soundraw/Udio; start with Cozy Ambient pack
-- [ ] **Build Stream Overlay + Music Bundle** — Weeks 3–6; repurpose SPD assets; Cozy Gaming bundle first
-- [ ] **Explore iOS/gaming app concept** — no-code (Bubble/Lovable); keep thinking; no action yet
+---
+
+## waiting on
+
+- [ ] **Batch 4–5 renders** — SPD autopilot; Jacob runs prompts 55–69 through ChatGPT when ready (no rush)
+- [ ] **Load NOVA Telegram launchd service** — run `launchctl load ~/Library/LaunchAgents/com.nova.telegram.plist` when ready to make bot auto-boot permanent
+
+---
+
+## someday
 
 ### General
 - [ ] **Set up week planning routine** — dump schedule into brain, Claude organizes; Sunday weekly review 30 min
@@ -62,6 +49,13 @@
 
 ## done
 
+- [x] ~~Archived — Gaming Notion Templates venture shelved 2026-03-13~~
+- [x] ~~Archived — Financial Spreadsheet Templates venture shelved 2026-03-13~~
+- [x] ~~Archived — Digital Rental Properties venture shelved 2026-03-13~~
+- [x] ~~Archived — Gamified Backlog Tracker (SaaS) venture shelved 2026-03-13~~
+- [x] ~~Archived — Dividend Portfolio Tracker (SaaS) venture shelved 2026-03-13~~
+- [x] ~~Archived — Royalty-Free Gaming Music Packs venture shelved 2026-03-13~~
+- [x] ~~Archived — Stream Overlay + Music Bundle Packs venture shelved 2026-03-13~~
 - [x] ~~Batch 4 — 12 deep IP reference designs (55–66) written + listing copy done~~ (2026-03-01)
 - [x] ~~Batch 5 — Capybara series (67–69) written + listing copy done~~ (2026-03-01)
 - [x] ~~design_prompts_master.md converted to Word doc (design_prompts_master.docx)~~ (2026-03-01)
