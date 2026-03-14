@@ -1,6 +1,6 @@
 # tasks
 
-*Last updated: March 13, 2026 — Venture cleanup. 3D Printing promoted to P0 Active Build. 7 ventures archived.*
+*Last updated: March 13, 2026 (evening) — Telegram bot removed. MCPs upgraded: GitHub, Apple Calendar, Google Trends, Reddit installed.*
 
 ---
 
@@ -36,7 +36,7 @@
 ## waiting on
 
 - [ ] **Batch 4–5 renders** — SPD autopilot; Jacob runs prompts 55–69 through ChatGPT when ready (no rush)
-- [ ] **Load NOVA Telegram launchd service** — run `launchctl load ~/Library/LaunchAgents/com.nova.telegram.plist` when ready to make bot auto-boot permanent
+- [ ] **Semgrep** — either `semgrep login` to activate or `claude plugins uninstall semgrep` to remove
 
 ---
 
